@@ -103,14 +103,15 @@
 }
 
 .btn-secondary {
-  background: var(--color-bg-surface);
-  color: var(--color-text);
-  border-color: var(--color-border);
+  background: var(--color-secondary-tint);
+  color: var(--color-secondary-text);
+  border: 1.5px solid var(--color-secondary-border);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--color-bg-subtle);
-  color: var(--color-text);
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #ffffff;
 }
 
 .btn-coral {
@@ -233,7 +234,11 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--color-secondary-border);
 }
 
 .card-body {
@@ -270,9 +275,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-secondary-text);
+  background: var(--color-secondary-tint);
+  border: 1px solid var(--color-secondary-border);
+  border-radius: var(--radius-sm);
+  padding: 0.16rem 0.55rem;
 }
 
 .status-text-success {
@@ -315,8 +324,9 @@
 }
 
 .tab-btn.is-active {
-  background: var(--color-bg-surface);
-  color: var(--color-text);
+  background: var(--color-secondary-tint);
+  color: var(--color-secondary-text);
+  border: 1px solid var(--color-secondary-border);
   box-shadow: 0 2px 8px rgba(25, 23, 43, 0.08);
 }
 
@@ -339,8 +349,8 @@
 }
 
 .choice-chip.is-selected {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
   color: #ffffff;
 }
 
@@ -366,7 +376,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 70%, var(--color-orange) 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   color: #ffffff;
 }
 
@@ -448,8 +458,9 @@
 }
 
 .sidebar-link.is-active {
-  background: var(--color-primary-tint);
-  color: var(--color-primary);
+  background: var(--color-secondary-tint);
+  color: var(--color-secondary-text);
+  border-left: 3px solid var(--color-secondary);
 }
 
 .sidebar-user {
@@ -481,6 +492,8 @@
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-secondary-border);
 }
 
 .mobile-top-bar {
@@ -580,7 +593,7 @@
   font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-secondary-text);
   margin-bottom: 0.5rem;
 }
 
@@ -731,7 +744,8 @@
 }
 
 .safety-tips-box {
-  background: var(--color-bg-subtle);
+  background: var(--color-secondary-tint);
+  border-left: 4px solid var(--color-secondary);
   border-radius: var(--radius-md);
   padding: 1rem;
   margin-bottom: 1rem;
@@ -781,7 +795,8 @@
 }
 
 .chat-thread-item.is-active {
-  background: var(--color-primary-tint);
+  background: var(--color-secondary-tint);
+  border-left: 3px solid var(--color-secondary);
 }
 
 .chat-pane {
@@ -826,13 +841,44 @@
 }
 
 .chat-bubble.is-mine .chat-meta {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .chat-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   font-size: 0.75rem;
   color: var(--color-text-secondary);
-  margin-top: 0.3rem;
+  margin-top: 0.35rem;
+}
+
+.msg-delete-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.45rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-danger);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.msg-delete-btn:hover:not(:disabled) {
+  background: var(--color-danger-tint);
+  border-color: rgba(198, 40, 40, 0.3);
+}
+
+.chat-bubble.is-mine .msg-delete-btn {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.chat-bubble.is-mine .msg-delete-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.26);
+  color: #ffffff;
 }
 
 .chat-compose {
@@ -951,7 +997,7 @@
 }
 
 .accent-highlight {
-  color: var(--color-secondary);
+  color: var(--color-secondary-text);
   font-weight: 700;
 }
 

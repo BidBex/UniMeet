@@ -3,6 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
+from app.config import get_settings
 from app.database import get_db
 from app.models.interest import Interest, UserInterest
 from app.models.user import User
@@ -15,7 +16,8 @@ from app.schemas.auth import (
     UserPublicOut,
     UserUpdateRequest,
 )
-from app.security.auth import get_current_user
+from app.security.auth import get_current_user, verify_password
+from app.seed import DEMO_PASSWORD, DEMO_USERS_DATA
 from app.services.compatibility import compute_compatibility
 from app.services.serializers import (
     get_blocked_user_ids,
@@ -28,11 +30,102 @@ from app.services.serializers import (
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
+def _resolve_demo_template(current_user: User) -> Optional[dict]:
+    if current_user.demo_key:
+        for item in DEMO_USERS_DATA:
+            if item["username"].lower() == current_user.demo_key.strip().lower():
+                return item
+
+    email_lower = (current_user.email or "").strip().lower()
+    username_lower = (current_user.username or "").strip().lower()
+
+    for item in DEMO_USERS_DATA:
+        if item["email"].lower() == email_lower or item["username"].lower() == username_lower:
+            return item
+
+    # Also handle edited demo accounts created before demo_key was added
+    if 1 <= current_user.id <= len(DEMO_USERS_DATA) and verify_password(
+        DEMO_PASSWORD, current_user.hashed_password
+    ):
+        return DEMO_USERS_DATA[current_user.id - 1]
+
+    return None
+
+
 @router.get("/me", response_model=UserPrivateOut, summary="Get own profile")
 def get_my_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    return user_to_private(db, current_user)
+
+
+@router.post("/me/reset-demo", response_model=UserPrivateOut, summary="Reset demo account to defaults")
+def reset_demo_account(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if get_settings().ENVIRONMENT.lower() == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Demo account reset is disabled in production.",
+        )
+
+    template = _resolve_demo_template(current_user)
+    if not template:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Reset to defaults is only available for demo accounts.",
+        )
+
+    target_email = template["email"].strip().lower()
+    target_username = template["username"].strip()
+
+    email_conflict = (
+        db.query(User)
+        .filter(User.email.ilike(target_email), User.id != current_user.id)
+        .first()
+    )
+    if email_conflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Default demo email is currently in use by another account.",
+        )
+
+    username_conflict = (
+        db.query(User)
+        .filter(User.username.ilike(target_username), User.id != current_user.id)
+        .first()
+    )
+    if username_conflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Default demo username is currently in use by another account.",
+        )
+
+    current_user.username = target_username
+    current_user.email = target_email
+    current_user.first_name = template["first_name"]
+    current_user.last_name = template["last_name"]
+    current_user.age = template["age"]
+    current_user.university = template["university"]
+    current_user.city = template["city"]
+    current_user.bio = template["bio"]
+    current_user.profile_picture = None
+    current_user.is_active = True
+    current_user.is_moderator = template.get("is_moderator", False)
+    current_user.demo_key = target_username
+    db.add(current_user)
+
+    db.query(UserInterest).filter(UserInterest.user_id == current_user.id).delete()
+    default_interests = (
+        db.query(Interest).filter(Interest.name.in_(template["interests"])).all()
+    )
+    for interest in default_interests:
+        db.add(UserInterest(user_id=current_user.id, interest_id=interest.id))
+
+    db.commit()
+    db.refresh(current_user)
     return user_to_private(db, current_user)
 
 
@@ -42,6 +135,11 @@ def update_my_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if not current_user.demo_key:
+        matched_demo = _resolve_demo_template(current_user)
+        if matched_demo:
+            current_user.demo_key = matched_demo["username"]
+
     updates = payload.model_dump(exclude_unset=True)
 
     if "email" in updates and updates["email"] is not None:

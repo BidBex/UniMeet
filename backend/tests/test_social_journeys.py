@@ -100,6 +100,19 @@ def test_journey_a_and_d_matching_compatibility_and_websocket_chat(client):
     assert read_res.status_code == 200
     assert read_res.json()["is_read"] is True
 
+    # Outsider cannot delete message
+    u3 = register_user(client, username="outsider", email="out@upt.ro").json()
+    h3 = {"Authorization": f"Bearer {u3['access_token']}"}
+    outsider_del = client.delete(f"/api/messages/{msg_id}", headers=h3)
+    assert outsider_del.status_code == 403
+
+    # Participant can delete message
+    del_res = client.delete(f"/api/messages/{msg_id}", headers=h1)
+    assert del_res.status_code == 200
+    history_after = client.get(f"/api/messages/conversations/{conv_id}", headers=h2)
+    assert history_after.status_code == 200
+    assert history_after.json()["messages"] == []
+
 
 def test_journey_b_going_solo_and_expiry(client, db_session):
     u1 = register_user(client, username="solo1", email="solo1@upt.ro").json()

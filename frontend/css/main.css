@@ -8,6 +8,8 @@
   --color-secondary: #ff6b70;
   --color-secondary-hover: #ea5459;
   --color-secondary-tint: #fff0f1;
+  --color-secondary-text: #be2430;
+  --color-secondary-border: rgba(255, 107, 112, 0.42);
   --color-coral: var(--color-secondary);
   --color-coral-hover: var(--color-secondary-hover);
   --color-coral-tint: var(--color-secondary-tint);
@@ -47,6 +49,8 @@
   --color-primary: #8b74f2;
   --color-primary-hover: #7357e8;
   --color-primary-tint: rgba(139, 116, 242, 0.22);
+  --color-secondary-text: #ff9ca0;
+  --color-secondary-border: rgba(255, 107, 112, 0.48);
   --color-success: #34d399;
   --color-success-tint: rgba(16, 185, 129, 0.16);
   --color-danger: #f87171;

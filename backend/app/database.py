@@ -52,6 +52,11 @@ def init_db() -> None:
     import app.models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+    if is_sqlite:
+        with engine.begin() as conn:
+            cols = {row[1] for row in conn.execute(text("PRAGMA table_info(users)"))}
+            if cols and "demo_key" not in cols:
+                conn.execute(text("ALTER TABLE users ADD COLUMN demo_key VARCHAR(50)"))
 
 
 def check_db_connection() -> bool:

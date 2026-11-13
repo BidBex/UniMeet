@@ -238,6 +238,39 @@ def mark_message_read(
     return MessageOut.model_validate(msg, from_attributes=True)
 
 
+@router.delete("/messages/{message_id}", summary="Delete a message from a conversation")
+async def delete_message(
+    message_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    msg = db.query(Message).filter(Message.id == message_id).first()
+    if not msg:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Message not found.")
+
+    conv = _verify_conversation_access(db, msg.conversation_id, current_user.id)
+    is_direct_chat = conv.group_id is None
+    if msg.sender_id != current_user.id and not is_direct_chat and not current_user.is_moderator:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only delete your own messages in group chats.",
+        )
+
+    conv_id = msg.conversation_id
+    db.delete(msg)
+    db.commit()
+
+    await chat_manager.broadcast(
+        conv_id,
+        {
+            "type": "message:deleted",
+            "message_id": message_id,
+            "conversation_id": conv_id,
+        },
+    )
+    return {"detail": "Message deleted.", "message_id": message_id, "conversation_id": conv_id}
+
+
 @router.websocket("/ws/chat/{conversation_id}")
 async def websocket_chat(
     websocket: WebSocket,

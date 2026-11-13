@@ -21,9 +21,9 @@
       <div class="page-header">
         <div>
           <h1>App Settings</h1>
-          <p class="muted-small">Switch between Light and Dark mode, pick your secondary accent color, or update your demo profile.</p>
+          <p class="muted-small">Switch between Light and Dark mode, pick your secondary accent color, or reset the demo account to defaults.</p>
         </div>
-        <button type="button" class="btn btn-secondary" id="settings-reset-btn">Reset to defaults</button>
+        <button type="button" class="btn btn-secondary" id="settings-reset-btn">Reset appearance</button>
       </div>
 
       <div class="cards-grid-2">
@@ -56,37 +56,58 @@
         <section class="card">
           <div class="card-body">
             <h2>Secondary Color</h2>
-            <p class="muted-small" style="margin-bottom:1rem;">Personalize accent buttons, swipe stamps, avatars, and compatibility bars.</p>
+            <p class="muted-small" style="margin-bottom:1rem;">Updates badges, tabs, secondary buttons, active navigation highlights, avatars, and accents app-wide.</p>
             <div class="color-swatch-grid" id="secondary-color-grid" role="group" aria-label="Secondary color"></div>
           </div>
         </section>
       </div>
 
-      <section class="card" style="margin-top:1.25rem;">
-        <div class="card-body">
-          <h2>Live Appearance Preview</h2>
-          <p class="muted-small" style="margin-bottom:1rem;">Changes apply instantly across Discover, Events, Matches, Messages, Groups, and Profile.</p>
-          <div class="card" style="padding:1.25rem;background:var(--color-bg-light);">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-              <div style="display:flex;align-items:center;gap:0.85rem;">
-                <div class="avatar-circle">UM</div>
-                <div>
-                  <strong style="display:block;">Flight Festival Warmup</strong>
-                  <span class="muted-small">Timisoara · <span class="accent-highlight">92% compatibility</span></span>
+      <div class="cards-grid-2" style="margin-top:1.25rem;">
+        <section class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.5rem;">
+              <h2 style="margin:0;">Live Appearance Preview</h2>
+              <span class="badge-inline">Festivals</span>
+            </div>
+            <p class="muted-small" style="margin-bottom:1rem;">Secondary color changes apply live across navigation, tabs, badges, and buttons.</p>
+            <div class="card" style="padding:1.25rem;background:var(--color-bg-light);border-color:var(--color-secondary-border);">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+                <div style="display:flex;align-items:center;gap:0.85rem;">
+                  <div class="avatar-circle">UM</div>
+                  <div>
+                    <strong style="display:block;">Flight Festival Warmup</strong>
+                    <span class="muted-small">Timisoara · <span class="accent-highlight">92% compatibility</span></span>
+                  </div>
+                </div>
+                <div class="card-actions" style="margin-top:0;">
+                  <button type="button" class="btn btn-primary btn-sm">Primary</button>
+                  <button type="button" class="btn btn-coral btn-sm" id="preview-secondary-btn">Highlight</button>
+                  <button type="button" class="btn btn-secondary btn-sm">Secondary</button>
                 </div>
               </div>
-              <div class="card-actions" style="margin-top:0;">
-                <button type="button" class="btn btn-primary btn-sm">Primary Action</button>
-                <button type="button" class="btn btn-coral btn-sm" id="preview-secondary-btn">Secondary Accent</button>
-                <a href="profile.html" class="btn btn-secondary btn-sm">Edit User Data</a>
+              <div class="compat-bar" style="margin-top:1rem;">
+                <div class="compat-bar-fill" style="width:92%;"></div>
               </div>
             </div>
-            <div class="compat-bar" style="margin-top:1rem;">
-              <div class="compat-bar-fill" style="width:92%;"></div>
+          </div>
+        </section>
+
+        <section class="card" id="demo-account-card">
+          <div class="card-body">
+            <h2>Demo Account</h2>
+            <p class="muted-small" id="demo-account-summary" style="margin-bottom:1rem;">
+              Restore the demo user's default name, username, email, university, city, bio, and interests.
+            </p>
+            <div class="safety-tips-box" id="demo-account-status" style="margin-bottom:1rem;">
+              Checking active session...
+            </div>
+            <div class="card-actions" style="margin-top:0;">
+              <button type="button" class="btn btn-coral" id="reset-demo-account-btn" disabled>Reset Demo Account to Defaults</button>
+              <a href="profile.html" class="btn btn-secondary">Edit User Data</a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>

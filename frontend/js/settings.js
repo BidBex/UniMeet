@@ -1,6 +1,9 @@
 /**
- * Settings screen controller: Light/Dark mode switching and secondary color selection.
+ * Settings screen controller: Light/Dark mode switching, secondary color selection,
+ * and resetting the demo account back to its default data.
  */
+import { API } from "./api.js";
+import { getCurrentUser, renderDashboardShell } from "./navigation.js";
 import {
   getThemePreferences,
   resetThemePreferences,
@@ -9,6 +12,25 @@ import {
   setThemeMode,
 } from "./theme.js";
 import { escapeHtml, qs, qsa, showToast } from "./utils.js";
+
+function renderDemoAccountSection(user) {
+  const statusEl = qs("#demo-account-status");
+  const resetBtn = qs("#reset-demo-account-btn");
+  if (!statusEl || !resetBtn) return;
+
+  if (!user) {
+    statusEl.innerHTML = `Sign in to manage or reset a demo account.`;
+    resetBtn.disabled = true;
+    return;
+  }
+
+  statusEl.innerHTML = `
+    <strong>${escapeHtml(user.first_name)} ${escapeHtml(user.last_name)}</strong>
+    <div class="muted-small">@${escapeHtml(user.username)} · ${escapeHtml(user.email)}</div>
+    <div class="muted-small">${escapeHtml(user.university || "No university")} · ${escapeHtml(user.city || "No city")}</div>
+  `;
+  resetBtn.disabled = false;
+}
 
 function renderSettingsUI() {
   const { mode, secondaryId } = getThemePreferences();
@@ -47,7 +69,7 @@ function renderSettingsUI() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   if (document.body?.dataset?.page !== "settings") return;
 
   qsa("[data-theme-mode]").forEach((btn) => {
@@ -62,6 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
     resetThemePreferences();
     renderSettingsUI();
     showToast("Appearance reset to default Light mode & Coral Flame.", "info");
+  });
+
+  const user = await getCurrentUser(true);
+  renderDemoAccountSection(user);
+
+  const resetDemoBtn = qs("#reset-demo-account-btn");
+  resetDemoBtn?.addEventListener("click", async () => {
+    resetDemoBtn.disabled = true;
+    const originalText = resetDemoBtn.textContent;
+    resetDemoBtn.textContent = "Resetting...";
+    try {
+      const restored = await API.resetDemoAccount();
+      renderDashboardShell(restored);
+      renderDemoAccountSection(restored);
+      showToast(`Demo account restored to defaults (@${restored.username}).`, "success");
+    } catch (err) {
+      showToast(err.message || "Could not reset demo account.", "error");
+    } finally {
+      resetDemoBtn.disabled = false;
+      resetDemoBtn.textContent = originalText;
+    }
   });
 
   renderSettingsUI();

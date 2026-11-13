@@ -38,6 +38,7 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_moderator: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    demo_key: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     interests = relationship(
         "UserInterest",

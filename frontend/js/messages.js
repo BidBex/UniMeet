@@ -12,6 +12,7 @@ const chatState = {
   user: null,
   conversations: [],
   activeConversationId: null,
+  activeConversation: null,
   activeMessages: [],
   renderedIds: new Set(),
   socket: null,
@@ -70,6 +71,32 @@ function renderConversationsList() {
   });
 }
 
+function syncConversationPreview(conversationId) {
+  const conv = chatState.conversations.find((c) => c.id === conversationId);
+  if (!conv) return;
+  if (chatState.activeConversationId === conversationId) {
+    const latest = chatState.activeMessages[chatState.activeMessages.length - 1];
+    conv.last_message = latest ? latest.content : null;
+    conv.last_message_at = latest ? latest.created_at : null;
+    renderConversationsList();
+  }
+}
+
+function removeMessageBubble(messageId) {
+  chatState.renderedIds.delete(messageId);
+  chatState.activeMessages = chatState.activeMessages.filter((m) => m.id !== messageId);
+
+  const historyEl = qs("#chat-history");
+  if (!historyEl) return;
+  const bubble = qs(`[data-message-id="${messageId}"]`, historyEl);
+  if (bubble) bubble.remove();
+
+  if (!chatState.activeMessages.length) {
+    historyEl.innerHTML = `<div class="empty-state"><p>No messages yet. Say hello and propose a public meetup spot!</p></div>`;
+  }
+  syncConversationPreview(chatState.activeConversationId);
+}
+
 function appendMessageBubble(msg) {
   if (chatState.renderedIds.has(msg.id)) return;
   chatState.renderedIds.add(msg.id);
@@ -81,12 +108,41 @@ function appendMessageBubble(msg) {
   if (empty) empty.remove();
 
   const isMine = chatState.user && msg.sender_id === chatState.user.id;
+  const canDelete =
+    isMine || !chatState.activeConversation?.group_id || Boolean(chatState.user?.is_moderator);
+
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble ${isMine ? "is-mine" : ""}`;
+  bubble.dataset.messageId = String(msg.id);
   bubble.innerHTML = `
     <div>${escapeHtml(msg.content)}</div>
-    <div class="chat-meta tabular-num">${escapeHtml(formatTimeShort(msg.created_at))}${isMine ? (msg.is_read ? " · Read" : " · Sent") : ""}</div>
+    <div class="chat-meta tabular-num">
+      <span>${escapeHtml(formatTimeShort(msg.created_at))}${isMine ? (msg.is_read ? " · Read" : " · Sent") : ""}</span>
+      ${
+        canDelete
+          ? `<button type="button" class="msg-delete-btn" data-delete-message="${msg.id}" aria-label="Delete message">Delete</button>`
+          : ""
+      }
+    </div>
   `;
+
+  const delBtn = qs("[data-delete-message]", bubble);
+  if (delBtn) {
+    delBtn.addEventListener("click", async () => {
+      delBtn.disabled = true;
+      delBtn.textContent = "Deleting...";
+      try {
+        await API.deleteMessage(msg.id);
+        removeMessageBubble(msg.id);
+        showToast("Message deleted.", "info");
+      } catch (err) {
+        delBtn.disabled = false;
+        delBtn.textContent = "Delete";
+        showToast(err.message || "Could not delete message.", "error");
+      }
+    });
+  }
+
   historyEl.appendChild(bubble);
   historyEl.scrollTop = historyEl.scrollHeight;
 
@@ -140,6 +196,8 @@ async function connectWebSocket(conversationId) {
           conv.last_message_at = payload.message.created_at;
           renderConversationsList();
         }
+      } else if (payload.type === "message:deleted" && payload.message_id) {
+        removeMessageBubble(payload.message_id);
       } else if (payload.type === "error" && payload.detail) {
         showToast(payload.detail, "error");
       }
@@ -168,6 +226,7 @@ async function connectWebSocket(conversationId) {
 
 async function selectConversation(conversationId) {
   chatState.activeConversationId = conversationId;
+  chatState.activeConversation = chatState.conversations.find((c) => c.id === conversationId) || null;
   chatState.renderedIds.clear();
   chatState.activeMessages = [];
   renderConversationsList();
@@ -181,6 +240,7 @@ async function selectConversation(conversationId) {
   try {
     const detail = await API.getConversation(conversationId);
     const conv = detail.conversation;
+    chatState.activeConversation = conv;
     headerEl.innerHTML = `
       <div>
         <strong>${escapeHtml(conv.title)}</strong>

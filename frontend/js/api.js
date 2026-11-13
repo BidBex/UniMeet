@@ -119,6 +119,7 @@ export const API = {
   // Users & Interests & Compatibility
   getMyProfile: () => apiRequest("/users/me"),
   updateMyProfile: (data) => apiRequest("/users/me", { method: "PUT", body: JSON.stringify(data) }),
+  resetDemoAccount: () => apiRequest("/users/me/reset-demo", { method: "POST" }),
   getUserProfile: (userId) => apiRequest(`/users/${userId}`),
   discoverUsers: (params = {}) => {
     const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v !== "" && v != null));
@@ -194,6 +195,7 @@ export const API = {
       body: JSON.stringify({ content }),
     }),
   markMessageRead: (messageId) => apiRequest(`/messages/${messageId}/read`, { method: "PUT" }),
+  deleteMessage: (messageId) => apiRequest(`/messages/${messageId}`, { method: "DELETE" }),
 
   // University Community
   getCommunity: (params = {}) => {

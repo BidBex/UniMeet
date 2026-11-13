@@ -125,3 +125,47 @@ def test_profile_edit_interests_and_privacy(client):
     pub_json = pub.json()
     assert "email" not in pub_json
     assert "hashed_password" not in pub_json
+
+
+def test_reset_demo_account_defaults(client):
+    # Register a non-demo user first -> reset-demo must reject
+    custom = register_user(client, username="custom_student", email="custom@upt.ro").json()
+    custom_headers = {"Authorization": f"Bearer {custom['access_token']}"}
+    bad_reset = client.post("/api/users/me/reset-demo", headers=custom_headers)
+    assert bad_reset.status_code == 400
+
+    # Register Elena's demo email/username, edit all fields & interests, then reset
+    demo = register_user(
+        client,
+        username="elena_popescu",
+        email="elena.demo@unimeet.edu",
+        password="DemoUser123!",
+        first_name="Temp",
+        last_name="User",
+    ).json()
+    demo_headers = {"Authorization": f"Bearer {demo['access_token']}"}
+
+    upd = client.put(
+        "/api/users/me",
+        headers=demo_headers,
+        json={
+            "username": "elena_renamed",
+            "email": "renamed.demo@unimeet.edu",
+            "first_name": "Changed",
+            "last_name": "Name",
+            "city": "Cluj-Napoca",
+            "bio": "Custom edited bio",
+        },
+    )
+    assert upd.status_code == 200
+    assert upd.json()["username"] == "elena_renamed"
+
+    restored = client.post("/api/users/me/reset-demo", headers=demo_headers)
+    assert restored.status_code == 200
+    data = restored.json()
+    assert data["username"] == "elena_popescu"
+    assert data["email"] == "elena.demo@unimeet.edu"
+    assert data["first_name"] == "Elena"
+    assert data["last_name"] == "Popescu"
+    assert data["city"] == "Timisoara"
+    assert any(i["name"] == "Indie Rock" for i in data["interests"])
