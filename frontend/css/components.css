@@ -1,0 +1,22 @@
+/* UniMeet Reusable UI Components (Expanded in Stage 2) */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  background: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 1.25rem;
+}
+
+.app-main {
+  padding: 1.5rem;
+  min-width: 0;
+}
+
+.mobile-bottom-nav {
+  display: none;
+}
