@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Create your UniMeet account to discover campus events and companions.">
+  <meta name="description" content="Create your UniMeet account to discover events and companions.">
   <title>Create Account — UniMeet</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
@@ -14,12 +14,102 @@
 <body data-page="register">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <main id="main-content" class="auth-shell">
-    <section class="container stage-placeholder">
-      <h1>Create Account</h1>
-      <p>Registration screen structure initialized (Stage 4).</p>
-    </section>
-  </main>
+  <div class="auth-shell">
+    <aside class="auth-aside">
+      <a href="index.html" class="brand-wordmark">
+        <img src="assets/icons/unimeet-logo.svg" alt="" width="30" height="30">
+        <span>UniMeet</span>
+      </a>
+      <div>
+        <h1>Find your people. Make plans. Go together.</h1>
+        <p>Join students across Timisoara and other cities discovering concerts, festivals, cinema nights, and study-break outings.</p>
+      </div>
+      <p class="muted-small" style="color: rgba(255,255,255,0.7);">University affiliation is optional · Safe &amp; moderated</p>
+    </aside>
+
+    <main id="main-content" class="auth-panel">
+      <div class="auth-card">
+        <h1 style="font-size: 1.75rem;">Create your account</h1>
+        <p>Start matching on events and groups right away.</p>
+
+        <div id="auth-feedback" class="form-alert" hidden></div>
+
+        <form id="register-form" class="stack-form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <label for="reg-first-name">First name</label>
+              <input id="reg-first-name" name="first_name" type="text" required autocomplete="given-name" placeholder="Elena">
+              <span class="field-error" id="err-first-name"></span>
+            </div>
+            <div class="field">
+              <label for="reg-last-name">Last name</label>
+              <input id="reg-last-name" name="last_name" type="text" required autocomplete="family-name" placeholder="Popescu">
+              <span class="field-error" id="err-last-name"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-username">Username</label>
+            <input id="reg-username" name="username" type="text" required autocomplete="username" placeholder="elena_timisoara">
+            <span class="field-error" id="err-username"></span>
+          </div>
+
+          <div class="field">
+            <label for="reg-email">Email</label>
+            <input id="reg-email" name="email" type="email" required autocomplete="email" placeholder="elena@student.upt.ro">
+            <span class="field-error" id="err-email"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="reg-university">University (optional)</label>
+              <input id="reg-university" name="university" type="text" list="uni-suggestions" placeholder="Politehnica University of Timisoara">
+              <datalist id="uni-suggestions">
+                <option value="Politehnica University of Timisoara"></option>
+                <option value="West University of Timisoara"></option>
+                <option value="Victor Babes University of Medicine"></option>
+                <option value="Babes-Bolyai University"></option>
+                <option value="University of Bucharest"></option>
+              </datalist>
+            </div>
+            <div class="field">
+              <label for="reg-city">City (optional)</label>
+              <input id="reg-city" name="city" type="text" placeholder="Timisoara">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-password">Password</label>
+            <div class="password-wrap">
+              <input id="reg-password" name="password" type="password" required autocomplete="new-password" placeholder="At least 8 characters">
+              <button type="button" class="password-toggle" data-toggle-pw="reg-password" aria-label="Show password">Show</button>
+            </div>
+            <ul class="pw-rules" id="pw-rules">
+              <li id="rule-len">At least 8 characters</li>
+              <li id="rule-letter">At least 1 letter</li>
+              <li id="rule-digit">At least 1 number</li>
+            </ul>
+            <span class="field-error" id="err-password"></span>
+          </div>
+
+          <div class="field">
+            <label for="reg-confirm">Confirm password</label>
+            <div class="password-wrap">
+              <input id="reg-confirm" name="confirm_password" type="password" required autocomplete="new-password" placeholder="Re-enter password">
+              <button type="button" class="password-toggle" data-toggle-pw="reg-confirm" aria-label="Show confirm password">Show</button>
+            </div>
+            <span class="field-error" id="err-confirm"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="register-submit-btn">Create account</button>
+        </form>
+
+        <p style="margin-top: 1.25rem; margin-bottom: 0;">
+          Already have an account? <a href="login.html">Log in</a> · <a href="index.html">Back home</a>
+        </p>
+      </div>
+    </main>
+  </div>
 
   <script type="module" src="js/auth.js"></script>
 </body>

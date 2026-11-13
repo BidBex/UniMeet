@@ -1,12 +1,25 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.database import check_db_connection, init_db
-from app.routers import auth, events, interests, users
+from app.routers import (
+    auth,
+    community,
+    events,
+    groups,
+    interests,
+    matches,
+    messages,
+    safety,
+    solo,
+    users,
+)
 from app.schemas import HealthResponse
 
 settings = get_settings()
@@ -23,7 +36,7 @@ def create_app() -> FastAPI:
     application = FastAPI(
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
-        description="UniMeet backend API for university social event discovery and matching.",
+        description="UniMeet backend API for university social event discovery, matching, groups, and real-time chat.",
         docs_url="/docs",
         redoc_url="/redoc",
         openapi_url="/openapi.json",
@@ -62,8 +75,19 @@ def create_app() -> FastAPI:
 
     application.include_router(auth.router, prefix=settings.API_PREFIX)
     application.include_router(users.router, prefix=settings.API_PREFIX)
-    application.include_router(events.router, prefix=settings.API_PREFIX)
     application.include_router(interests.router, prefix=settings.API_PREFIX)
+    application.include_router(events.router, prefix=settings.API_PREFIX)
+    application.include_router(matches.router, prefix=settings.API_PREFIX)
+    application.include_router(groups.router, prefix=settings.API_PREFIX)
+    application.include_router(solo.router, prefix=settings.API_PREFIX)
+    application.include_router(messages.router, prefix=settings.API_PREFIX)
+    application.include_router(community.router, prefix=settings.API_PREFIX)
+    application.include_router(safety.router, prefix=settings.API_PREFIX)
+
+    # Serve Vanilla HTML/CSS/JS frontend at root when present (never overrides /api, /docs, /openapi.json)
+    frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
+    if frontend_dir.is_dir():
+        application.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
     return application
 

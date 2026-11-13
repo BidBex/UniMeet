@@ -1,8 +1,127 @@
-/* UniMeet Swipe Discovery Interface Stylesheet (Populated in Stage 6) */
+/* UniMeet Tinder-Style Discovery Deck Stylesheet */
+
+.discover-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(260px, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
 
 .discover-deck-region {
   position: relative;
   width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
+  max-width: 480px;
+}
+
+.swipe-card {
+  position: relative;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+}
+
+.swipe-card.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.swipe-card.exit-right {
+  transform: translateX(130%) rotate(14deg);
+  opacity: 0;
+}
+
+.swipe-card.exit-left {
+  transform: translateX(-130%) rotate(-14deg);
+  opacity: 0;
+}
+
+.swipe-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-bg-subtle);
+}
+
+.swipe-card-scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.5rem 1.25rem 1rem;
+  background: linear-gradient(to top, rgba(25, 23, 43, 0.85), rgba(25, 23, 43, 0.35), transparent);
+  color: #ffffff;
+}
+
+.swipe-card-scrim h2 {
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.swipe-card-scrim .meta-line {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.swipe-stamp {
+  position: absolute;
+  top: 1rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.swipe-stamp-like {
+  left: 1rem;
+  background: var(--color-coral);
+  color: #ffffff;
+}
+
+.swipe-stamp-skip {
+  right: 1rem;
+  background: var(--color-bg-dark);
+  color: #ffffff;
+}
+
+.swipe-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.swipe-btn {
+  min-width: 120px;
+  min-height: 50px;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+}
+
+.discover-side-panel {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.compat-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-bg-subtle);
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.compat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-coral));
 }

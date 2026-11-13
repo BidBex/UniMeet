@@ -1,25 +1,40 @@
-/* UniMeet Stage 1 Foundation Stylesheet (Design System expanded in Stage 2) */
+/* UniMeet Design System — Core Tokens, Typography & Base Layout */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
 
 :root {
   --color-primary: #7357e8;
-  --color-primary-hover: #5f43d6;
+  --color-primary-hover: #5e43d4;
+  --color-primary-tint: #efecfc;
   --color-coral: #ff6b70;
+  --color-coral-hover: #ea5459;
+  --color-coral-tint: #fff0f1;
   --color-orange: #ffaa57;
+  --color-orange-tint: #fff5ea;
+  --color-success: #168049;
+  --color-success-tint: #ebf9f1;
+  --color-danger: #c62828;
+  --color-danger-tint: #fdecec;
+
   --color-bg-light: #f8f7fc;
   --color-bg-surface: #ffffff;
+  --color-bg-subtle: #f1eff8;
   --color-bg-dark: #19172b;
   --color-text: #24213a;
   --color-text-secondary: #5d5975;
   --color-border: #e5e2f2;
 
-  --font-display: "Plus Jakarta Sans", "DM Sans", system-ui, -apple-system, sans-serif;
-  --font-body: "DM Sans", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
+  --radius-xl: 24px;
+  --shadow-card: 0 8px 24px rgba(25, 23, 43, 0.06);
+  --shadow-modal: 0 24px 48px rgba(25, 23, 43, 0.18);
   --container-max: 1200px;
+  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *,
@@ -30,6 +45,7 @@
 
 html {
   font-size: 16px;
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -39,7 +55,7 @@ body {
   background-color: var(--color-bg-light);
   color: var(--color-text);
   font-family: var(--font-body);
-  line-height: 1.55;
+  line-height: 1.6;
   overflow-x: hidden;
 }
 
@@ -48,8 +64,27 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  margin: 0 0 0.75rem;
-  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0 0 0.65rem;
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 
 p {
@@ -60,6 +95,24 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
 a:focus-visible,
@@ -71,15 +124,26 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
   padding: 0.75rem 1rem;
   background: var(--color-bg-dark);
   color: #ffffff;
   font-weight: 600;
+  border-radius: var(--radius-sm);
 }
 
 .skip-link:focus {
@@ -91,12 +155,32 @@ textarea:focus-visible {
   width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
 }
 
-.stage-placeholder {
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
+.muted-small {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.tabular-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

@@ -9,3 +9,7 @@ class HealthResponse(BaseModel):
     version: str
     environment: str
     database: str
+
+
+class MessageResponse(BaseModel):
+    message: str

@@ -15,12 +15,31 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Events</h1>
-        <p>Event browsing structure initialized (Stages 5 & 7).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Events &amp; Outings</h1>
+          <p class="muted-small">Search student activities by category, city, university, or date.</p>
+        </div>
+        <a href="create-event.html" class="btn btn-primary">Create an outing</a>
+      </div>
+
+      <form id="events-filter-form" class="filter-bar">
+        <input id="ev-q" type="search" placeholder="Search event titles..." aria-label="Search event titles">
+        <select id="ev-category" aria-label="Category">
+          <option value="">All categories</option>
+        </select>
+        <input id="ev-city" type="text" placeholder="City (e.g. Timisoara)" aria-label="City">
+        <input id="ev-university" type="text" placeholder="University" aria-label="University">
+        <input id="ev-date" type="date" aria-label="Event date">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </form>
+
+      <div id="events-container"></div>
+      <div id="events-pagination" class="card-actions" style="justify-content: center; margin-top: 1.5rem;"></div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

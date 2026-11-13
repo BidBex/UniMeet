@@ -1,30 +1,152 @@
-/* UniMeet Responsive Rules (Tested across 360px, 390px, 768px, 1024px, 1440px in Stage 11) */
+/* UniMeet Responsive Breakpoints (1440px, 1024px, 768px, 390px, 360px) */
 
 @media (max-width: 1024px) {
   .app-layout {
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 216px 1fr;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .discover-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .discover-deck-region {
+    margin: 0 auto;
+  }
+
+  .bento-wide,
+  .bento-narrow,
+  .bento-half {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 860px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-aside {
+    display: none;
+  }
+
+  .chat-shell {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+
+  .chat-list {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    max-height: 220px;
   }
 }
 
 @media (max-width: 768px) {
+  .top-bar-links {
+    display: none;
+  }
+
+  .hero-split,
+  .step-list,
+  .cards-grid,
+  .cards-grid-2,
+  .field-row,
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+
   .app-layout {
     grid-template-columns: 1fr;
-    padding-bottom: 4.5rem;
+    padding-bottom: 4rem;
   }
 
   .app-sidebar {
     display: none;
   }
 
-  .mobile-bottom-nav {
+  .app-main {
+    padding: 0 1rem 1.5rem;
+  }
+
+  /* Compact top bar + bottom bar stay well under 15% of mobile viewport height */
+  .mobile-top-bar {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 35;
+    height: 50px;
+    margin: 0 -1rem 1rem;
+    padding: 0 1rem;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-page-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .mobile-bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 4rem;
-    background: var(--color-bg-surface);
+    height: 56px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
     border-top: 1px solid var(--color-border);
     z-index: 40;
+  }
+
+  .bottom-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    min-height: 44px;
+    color: var(--color-text-secondary);
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .bottom-nav-link.is-active {
+    color: var(--color-primary);
+  }
+
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 4.25rem;
+    max-width: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .auth-card {
+    padding: 1.35rem;
+  }
+
+  .swipe-btn {
+    min-width: 100px;
   }
 }

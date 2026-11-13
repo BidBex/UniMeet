@@ -14,12 +14,57 @@
 <body data-page="login">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <main id="main-content" class="auth-shell">
-    <section class="container stage-placeholder">
-      <h1>Log In</h1>
-      <p>Authentication screen structure initialized (Stage 4).</p>
-    </section>
-  </main>
+  <div class="auth-shell">
+    <aside class="auth-aside">
+      <a href="index.html" class="brand-wordmark">
+        <img src="assets/icons/unimeet-logo.svg" alt="" width="30" height="30">
+        <span>UniMeet</span>
+      </a>
+      <div>
+        <h1>Welcome back to your campus social circle.</h1>
+        <p>Check your mutual event matches, respond to Going Solo invites, and coordinate tonight's plans in real-time chat.</p>
+      </div>
+      <p class="muted-small" style="color: rgba(255,255,255,0.7);">UniMeet · UniHack2026</p>
+    </aside>
+
+    <main id="main-content" class="auth-panel">
+      <div class="auth-card">
+        <h1 style="font-size: 1.75rem;">Sign in to UniMeet</h1>
+        <p>Use your email or username and password.</p>
+
+        <div id="auth-feedback" class="form-alert" hidden></div>
+
+        <form id="login-form" class="stack-form" novalidate>
+          <div class="field">
+            <label for="login-identifier">Email or username</label>
+            <input id="login-identifier" name="identifier" type="text" autocomplete="username" required placeholder="elena.demo@unimeet.edu">
+            <span class="field-error" id="err-identifier"></span>
+          </div>
+
+          <div class="field">
+            <label for="login-password">Password</label>
+            <div class="password-wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+              <button type="button" class="password-toggle" data-toggle-pw="login-password" aria-label="Show password">Show</button>
+            </div>
+            <span class="field-error" id="err-password"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn">Sign in</button>
+        </form>
+
+        <div class="demo-box">
+          <strong>Seeded demo account (for quick testing)</strong>
+          <span class="muted-small">Email: <code>elena.demo@unimeet.edu</code> · Password: <code>DemoUser123!</code></span>
+          <button type="button" class="btn btn-secondary btn-sm" id="fill-demo-btn">Fill demo credentials</button>
+        </div>
+
+        <p style="margin-top: 1.25rem; margin-bottom: 0;">
+          New to UniMeet? <a href="register.html">Create an account</a> · <a href="index.html">Back home</a>
+        </p>
+      </div>
+    </main>
+  </div>
 
   <script type="module" src="js/auth.js"></script>
 </body>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Create an event or announce an outing on UniMeet.">
-  <title>Create Outing — UniMeet</title>
+  <meta name="description" content="Create an outing or post a Going Solo status on UniMeet.">
+  <title>Create an Outing — UniMeet</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
@@ -15,12 +15,112 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Create an Outing</h1>
-        <p>Event creation form structure initialized (Stages 5, 7 & 9).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Create an Outing</h1>
+          <p class="muted-small">Host a new event or announce that you want company for an existing one.</p>
+        </div>
+        <a href="events.html" class="btn btn-secondary">Back to events</a>
+      </div>
+
+      <div class="cards-grid-2">
+        <section class="card">
+          <div class="card-body">
+            <h2>Host a New Event</h2>
+            <div id="create-event-feedback" class="form-alert" hidden></div>
+
+            <form id="create-event-form" class="stack-form" novalidate>
+              <div class="field">
+                <label for="ce-title">Event title</label>
+                <input id="ce-title" type="text" required minlength="3" maxlength="160" placeholder="e.g. Friday Indie Night at Bastion">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-category">Category</label>
+                  <select id="ce-category" required></select>
+                </div>
+                <div class="field">
+                  <label for="ce-max">Max participants (optional)</label>
+                  <input id="ce-max" type="number" min="2" max="5000" placeholder="e.g. 20">
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-location">Venue / Meeting spot</label>
+                  <input id="ce-location" type="text" required minlength="2" placeholder="e.g. Piata Unirii">
+                </div>
+                <div class="field">
+                  <label for="ce-city">City</label>
+                  <input id="ce-city" type="text" required minlength="2" value="Timisoara">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ce-university">University (optional)</label>
+                <input id="ce-university" type="text" placeholder="e.g. Politehnica University of Timisoara">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-start">Start date &amp; time</label>
+                  <input id="ce-start" type="datetime-local" required>
+                </div>
+                <div class="field">
+                  <label for="ce-end">End date &amp; time (optional)</label>
+                  <input id="ce-end" type="datetime-local">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ce-image-preset">Cover image preset</label>
+                <select id="ce-image-preset"></select>
+              </div>
+
+              <div class="field">
+                <label for="ce-description">Description</label>
+                <textarea id="ce-description" rows="4" required minlength="10" placeholder="Share what to expect, ticket info, and where to meet..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="ce-submit-btn">Publish outing</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-body">
+            <h2>Going Solo Announcement</h2>
+            <p>Have a free evening and want to join someone going to an upcoming event? Post a temporary Going Solo status.</p>
+            <div id="create-solo-feedback" class="form-alert" hidden></div>
+
+            <form id="create-solo-form" class="stack-form" novalidate>
+              <div class="field">
+                <label for="solo-event-select">Choose event</label>
+                <select id="solo-event-select" required></select>
+              </div>
+              <div class="field">
+                <label for="solo-message">Personal note</label>
+                <textarea id="solo-message" rows="3" required minlength="5" maxlength="500" placeholder="I'd love to go to this concert — anyone want to meet beforehand for coffee?"></textarea>
+              </div>
+              <div class="field">
+                <label for="solo-expires">Expires in</label>
+                <select id="solo-expires">
+                  <option value="24">24 hours</option>
+                  <option value="48" selected>48 hours</option>
+                  <option value="72">72 hours</option>
+                  <option value="168">7 days</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-coral" id="solo-submit-btn">Post Going Solo status</button>
+            </form>
+          </div>
+        </section>
+      </div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

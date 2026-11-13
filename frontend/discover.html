@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Swipe and discover events, students, and groups on UniMeet.">
+  <meta name="description" content="Swipe and discover events, students, groups, and Going Solo companions on UniMeet.">
   <title>Discover — UniMeet</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
@@ -16,12 +16,54 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Discover</h1>
-        <p>Swipe discovery deck structure initialized (Stages 5–6).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Discover</h1>
+          <p class="muted-small">Swipe right or press Right Arrow to like/join. Swipe left or press Left Arrow to skip.</p>
+        </div>
+        <button type="button" class="btn btn-secondary" id="open-solo-modal-btn">Announce Going Solo</button>
+      </div>
+
+      <div class="segmented-tabs" role="tablist" aria-label="Discovery categories">
+        <button type="button" class="tab-btn is-active" data-tab="events" role="tab" aria-selected="true">Events</button>
+        <button type="button" class="tab-btn" data-tab="people" role="tab" aria-selected="false">People</button>
+        <button type="button" class="tab-btn" data-tab="groups" role="tab" aria-selected="false">Groups</button>
+        <button type="button" class="tab-btn" data-tab="solo" role="tab" aria-selected="false">Going Solo</button>
+      </div>
+
+      <div class="discover-stage">
+        <div class="discover-deck-region">
+          <div id="deck-container" aria-live="polite"></div>
+          <div class="swipe-actions" id="swipe-actions" hidden>
+            <button type="button" class="btn btn-secondary swipe-btn" id="btn-skip">Skip</button>
+            <button type="button" class="btn btn-coral swipe-btn" id="btn-like">Like</button>
+          </div>
+        </div>
+
+        <aside class="discover-side-panel">
+          <h3>Discovery Filters</h3>
+          <form id="discover-filter-form" class="stack-form">
+            <div class="field">
+              <label for="disc-city">City</label>
+              <input id="disc-city" type="text" placeholder="e.g. Timisoara">
+            </div>
+            <div class="field">
+              <label for="disc-uni">University</label>
+              <input id="disc-uni" type="text" placeholder="e.g. Politehnica">
+            </div>
+            <div class="field" id="disc-event-context-wrap">
+              <label for="disc-event-context">Match for event (People tab)</label>
+              <select id="disc-event-context"></select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Apply filters</button>
+            <button type="button" class="btn btn-secondary btn-full" id="disc-reset-btn">Reset deck</button>
+          </form>
+        </aside>
+      </div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

@@ -1,9 +1,97 @@
-/* UniMeet Authentication Screens Stylesheet (Populated in Stage 4) */
+/* UniMeet Authentication Pages Stylesheet */
 
 .auth-shell {
   min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--color-bg-light);
+}
+
+.auth-aside {
+  background: var(--color-bg-dark);
+  color: #ffffff;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-aside h1,
+.auth-aside h2,
+.auth-aside p {
+  color: #ffffff;
+}
+
+.auth-aside p {
+  opacity: 0.84;
+}
+
+.auth-aside .brand-wordmark {
+  color: #ffffff;
+}
+
+.auth-panel {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+}
+
+.password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrap input {
+  padding-right: 4.5rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  min-height: 34px;
+  padding: 0 0.65rem;
+  border: none;
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pw-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.pw-rules li.is-met {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.demo-box {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

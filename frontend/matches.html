@@ -15,12 +15,19 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Matches</h1>
-        <p>Matches view structure initialized (Stages 5 & 9).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Mutual Matches</h1>
+          <p class="muted-small">People who matched with you for shared events.</p>
+        </div>
+        <a href="discover.html" class="btn btn-primary">Keep discovering</a>
+      </div>
+
+      <div id="matches-container"></div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

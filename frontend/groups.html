@@ -15,12 +15,32 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Groups</h1>
-        <p>Groups view structure initialized (Stages 5 & 9).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Student Groups &amp; Going Solo</h1>
+          <p class="muted-small">Join an existing crew or team up with students announcing they are going solo.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="open-create-group-btn">Create a group</button>
+      </div>
+
+      <div class="segmented-tabs" role="tablist">
+        <button type="button" class="tab-btn is-active" data-group-tab="groups" role="tab">Groups</button>
+        <button type="button" class="tab-btn" data-group-tab="solo" role="tab">Going Solo Feed</button>
+        <button type="button" class="tab-btn" data-group-tab="community" role="tab">University Community</button>
+      </div>
+
+      <form id="groups-filter-form" class="filter-bar">
+        <input id="grp-q" type="search" placeholder="Search groups or keywords..." aria-label="Search groups">
+        <input id="grp-uni" type="text" placeholder="University" aria-label="Filter by university">
+        <input id="grp-city" type="text" placeholder="City (e.g. Timisoara)" aria-label="Filter by city">
+        <button type="submit" class="btn btn-primary">Apply</button>
+      </form>
+
+      <div id="groups-content"></div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

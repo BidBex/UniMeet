@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="UniMeet — Find your people. Make plans. Go together. University social event discovery and companion matching.">
-  <title>UniMeet — Find Your People. Go Together.</title>
+  <title>UniMeet — Find your people. Make plans. Go together.</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
@@ -15,10 +15,150 @@
 
   <header class="site-header" id="site-header"></header>
 
-  <main id="main-content" class="page-shell">
-    <section class="container stage-placeholder">
-      <h1>UniMeet</h1>
-      <p>Frontend foundation initialized. Landing page layout and design system will be built in Stages 2–3.</p>
+  <main id="main-content">
+    <section class="landing-hero">
+      <div class="container hero-split">
+        <div class="hero-copy">
+          <p class="badge-inline">University Event Companion Platform · Timisoara &amp; Beyond</p>
+          <h1 class="hero-headline">Find your people. Make plans. Go together.</h1>
+          <p class="hero-sub">
+            UniMeet connects university students who want to attend concerts, festivals, indie cinema, theatre, and campus outings — even when nobody in their circle is free.
+          </p>
+          <div class="hero-actions">
+            <a href="events.html" class="btn btn-primary">Find an event</a>
+            <a href="register.html" class="btn btn-secondary">Create an account</a>
+          </div>
+          <p class="muted-small">
+            Open to all students and local young adults · Zero mandatory university lock-in · Real-time group &amp; 1:1 chat
+          </p>
+        </div>
+        <div class="hero-visual">
+          <img
+            src="assets/images/hero-concert.jpg"
+            alt="University students walking together into an evening courtyard indie concert"
+            referrerpolicy="no-referrer"
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-section" id="features">
+      <div class="container">
+        <div class="section-intro">
+          <h2>Built for real plans, not endless scrolling</h2>
+          <p>Every feature centers on getting out into the city with people who share your exact taste in music, film, games, or campus activities.</p>
+        </div>
+
+        <div class="bento-grid">
+          <article class="card bento-wide">
+            <div class="media-frame">
+              <img src="assets/images/event-festival.jpg" alt="Outdoor summer street arts and music festival in a city square" referrerpolicy="no-referrer">
+            </div>
+            <div class="card-body">
+              <div class="meta-line">
+                <span>Event-first matching</span>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <span>Explainable compatibility</span>
+              </div>
+              <h3>Match over the exact event you want to attend</h3>
+              <p>Swipe through upcoming concerts, festivals, cinema nights, or fellow students heading to the same venue. Mutual interest opens a dedicated conversation immediately.</p>
+            </div>
+          </article>
+
+          <article class="card bento-narrow">
+            <div class="media-frame">
+              <img src="assets/images/event-boardgames.jpg" alt="Students playing board games with specialty coffee at a campus cafe" referrerpolicy="no-referrer">
+            </div>
+            <div class="card-body">
+              <div class="meta-line">
+                <span>Going Solo</span>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <span>Small groups</span>
+              </div>
+              <h3>Announce that you are going solo</h3>
+              <p>Have a free evening with no plans yet? Post a time-limited Going Solo note on any event, or join an existing 4-to-8 person student crew.</p>
+            </div>
+          </article>
+
+          <article class="card bento-half">
+            <div class="card-body">
+              <div class="meta-line">
+                <span>Transparent scoring</span>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <span>0–100 scale</span>
+              </div>
+              <h3>Compatibility without black-box algorithms</h3>
+              <p>Compatibility is calculated strictly from shared interests (60%), shared university (20%), same city (10%), and overlapping event categories (10%) — never sensitive personal attributes.</p>
+            </div>
+          </article>
+
+          <article class="card bento-half">
+            <div class="card-body">
+              <div class="meta-line">
+                <span>University hubs</span>
+                <span class="meta-sep" aria-hidden="true">·</span>
+                <span>Optional affiliation</span>
+              </div>
+              <h3>Campus communities in Timisoara and beyond</h3>
+              <p>Discover peers from Politehnica, UVT, or Victor Babes, filter outings by campus or city, and connect cleanly via live WebSocket chat.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-section" id="how-it-works">
+      <div class="container">
+        <div class="section-intro">
+          <h2>How UniMeet works</h2>
+          <p>Go from an empty Friday evening to confirmed plans in three straightforward steps.</p>
+        </div>
+        <div class="step-list">
+          <article class="card">
+            <div class="card-body">
+              <div class="step-number">01</div>
+              <h3>Pick your interests &amp; city</h3>
+              <p>Create an account in under a minute, select your favorite music, cinema, gaming, or outdoor interests, and optionally add your university.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <div class="step-number">02</div>
+              <h3>Swipe events, people, or groups</h3>
+              <p>Explore curated city outings, join open groups, or post a Going Solo status when you want company for a specific night.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <div class="step-number">03</div>
+              <h3>Coordinate in real-time chat</h3>
+              <p>Once a mutual match, group join, or solo meetup is confirmed, agree on a public meeting spot in live WebSocket messaging.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="landing-section" id="safety">
+      <div class="container cards-grid-2">
+        <article class="card">
+          <div class="card-body">
+            <h2>Built-in safety &amp; moderation controls</h2>
+            <p>Every profile and conversation includes one-tap reporting and instant blocking. Blocked users disappear from discovery, groups, Going Solo feeds, and chat immediately.</p>
+            <p class="muted-small">Accounts are email-registered without fabricated identity verification badges, and first meetups are encouraged in public, well-lit campus or city venues.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-body">
+            <h2>Ready for tonight's plans?</h2>
+            <p>Browse upcoming concerts, rooftop screenings, board game nights, and student excursions happening around you right now.</p>
+            <div class="card-actions">
+              <a href="events.html" class="btn btn-primary">Find an event</a>
+              <a href="login.html" class="btn btn-secondary">Log in</a>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 

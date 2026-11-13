@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Chat with your matched event companions on UniMeet.">
+  <meta name="description" content="Chat in real time with matched event companions and groups on UniMeet.">
   <title>Messages — UniMeet</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
@@ -15,12 +15,36 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Messages</h1>
-        <p>Messaging view structure initialized (Stages 5, 9 & 10).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Messages</h1>
+          <p class="muted-small">Real-time WebSocket chat with your matches, groups, and solo connections.</p>
+        </div>
+        <span id="ws-status-label" class="muted-small" aria-live="polite">Disconnected</span>
+      </div>
+
+      <div class="chat-shell" id="chat-shell">
+        <div class="chat-list" id="conversation-list" aria-label="Conversations"></div>
+
+        <section class="chat-pane" id="chat-pane" aria-label="Active conversation">
+          <div class="chat-pane-header" id="chat-pane-header">
+            <strong>Select a conversation</strong>
+          </div>
+          <div class="chat-history" id="chat-history">
+            <div class="empty-state">
+              <p>Choose a conversation on the left to view chat history and send messages.</p>
+            </div>
+          </div>
+          <form class="chat-compose" id="chat-compose-form" hidden>
+            <input id="chat-message-input" type="text" maxlength="2000" required placeholder="Write a message..." aria-label="Message text">
+            <button type="submit" class="btn btn-primary" id="chat-send-btn">Send</button>
+          </form>
+        </section>
+      </div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 

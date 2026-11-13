@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Manage your UniMeet student profile, interests, and safety settings.">
+  <meta name="description" content="Manage your UniMeet student profile, interests, settings, and blocked users.">
   <title>Profile — UniMeet</title>
   <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
   <link rel="stylesheet" href="css/main.css">
@@ -15,12 +15,25 @@
 
   <div class="app-layout" id="app-shell">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
     <main id="main-content" class="app-main">
-      <section class="stage-placeholder">
-        <h1>Profile</h1>
-        <p>Profile and settings structure initialized (Stages 5, 8 & 9).</p>
-      </section>
+      <div class="page-header">
+        <div>
+          <h1>Your Profile &amp; Settings</h1>
+          <p class="muted-small">Customize your bio, university, interests, and safety preferences.</p>
+        </div>
+        <button type="button" class="btn btn-secondary" id="profile-logout-btn">Sign out</button>
+      </div>
+
+      <div class="segmented-tabs" role="tablist">
+        <button type="button" class="tab-btn is-active" data-profile-tab="overview">Overview &amp; Edit</button>
+        <button type="button" class="tab-btn" data-profile-tab="interests">Interests</button>
+        <button type="button" class="tab-btn" data-profile-tab="blocked">Safety &amp; Blocked Users</button>
+      </div>
+
+      <div id="profile-content"></div>
     </main>
+
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
   </div>
 
