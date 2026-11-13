@@ -1,0 +1,1 @@
+"""UniMeet backend application package."""

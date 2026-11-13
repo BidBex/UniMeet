@@ -1,0 +1,6 @@
+{
+  "name": "UniMeet",
+  "description": "University-oriented social event discovery and matching backend for UniHack2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
