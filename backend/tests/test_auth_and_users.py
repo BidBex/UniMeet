@@ -79,10 +79,27 @@ def test_profile_edit_interests_and_privacy(client):
     upd = client.put(
         "/api/users/me",
         headers={"Authorization": f"Bearer {token1}"},
-        json={"bio": "Love live music and cinema", "city": "Timisoara", "age": 21},
+        json={
+            "first_name": "Elena-Updated",
+            "username": "user1_updated",
+            "email": "u1_updated@upt.ro",
+            "bio": "Love live music and cinema",
+            "city": "Timisoara",
+            "age": 21,
+        },
     )
     assert upd.status_code == 200
+    assert upd.json()["first_name"] == "Elena-Updated"
+    assert upd.json()["username"] == "user1_updated"
+    assert upd.json()["email"] == "u1_updated@upt.ro"
     assert upd.json()["bio"] == "Love live music and cinema"
+
+    conflict = client.put(
+        "/api/users/me",
+        headers={"Authorization": f"Bearer {token1}"},
+        json={"email": "u2@upt.ro"},
+    )
+    assert conflict.status_code == 409
 
     interests_res = client.get(
         "/api/users/interests",

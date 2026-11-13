@@ -1,6 +1,7 @@
 /**
  * Shared ES6+ utilities: DOM helpers, XSS escaping, toast notifications, image fallbacks, and safety modals.
  */
+import "./theme.js";
 
 export function qs(selector, scope = document) {
   return scope.querySelector(selector);

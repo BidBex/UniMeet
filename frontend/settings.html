@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Customize your UniMeet appearance, light or dark theme, and secondary accent color.">
+  <title>Settings — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/discover.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="settings">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-layout" id="app-shell">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
+    <main id="main-content" class="app-main">
+      <div class="page-header">
+        <div>
+          <h1>App Settings</h1>
+          <p class="muted-small">Switch between Light and Dark mode, pick your secondary accent color, or update your demo profile.</p>
+        </div>
+        <button type="button" class="btn btn-secondary" id="settings-reset-btn">Reset to defaults</button>
+      </div>
+
+      <div class="cards-grid-2">
+        <section class="card">
+          <div class="card-body">
+            <h2>Theme Mode</h2>
+            <p class="muted-small" style="margin-bottom:1rem;">Choose how UniMeet looks across every screen.</p>
+            <div class="theme-mode-grid" role="group" aria-label="Theme mode">
+              <button type="button" class="theme-mode-card" id="theme-btn-light" data-theme-mode="light">
+                <div class="theme-preview-bar is-light" aria-hidden="true">
+                  <span class="theme-preview-dot" style="background:#7357e8;"></span>
+                  <span class="theme-preview-dot" style="background:var(--color-secondary);"></span>
+                </div>
+                <strong>Light Mode</strong>
+                <span class="muted-small">Bright canvas for daytime browsing</span>
+              </button>
+
+              <button type="button" class="theme-mode-card" id="theme-btn-dark" data-theme-mode="dark">
+                <div class="theme-preview-bar is-dark" aria-hidden="true">
+                  <span class="theme-preview-dot" style="background:#8b74f2;"></span>
+                  <span class="theme-preview-dot" style="background:var(--color-secondary);"></span>
+                </div>
+                <strong>Dark Mode</strong>
+                <span class="muted-small">Midnight plum surface for low-light outings</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-body">
+            <h2>Secondary Color</h2>
+            <p class="muted-small" style="margin-bottom:1rem;">Personalize accent buttons, swipe stamps, avatars, and compatibility bars.</p>
+            <div class="color-swatch-grid" id="secondary-color-grid" role="group" aria-label="Secondary color"></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="card" style="margin-top:1.25rem;">
+        <div class="card-body">
+          <h2>Live Appearance Preview</h2>
+          <p class="muted-small" style="margin-bottom:1rem;">Changes apply instantly across Discover, Events, Matches, Messages, Groups, and Profile.</p>
+          <div class="card" style="padding:1.25rem;background:var(--color-bg-light);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+              <div style="display:flex;align-items:center;gap:0.85rem;">
+                <div class="avatar-circle">UM</div>
+                <div>
+                  <strong style="display:block;">Flight Festival Warmup</strong>
+                  <span class="muted-small">Timisoara · <span class="accent-highlight">92% compatibility</span></span>
+                </div>
+              </div>
+              <div class="card-actions" style="margin-top:0;">
+                <button type="button" class="btn btn-primary btn-sm">Primary Action</button>
+                <button type="button" class="btn btn-coral btn-sm" id="preview-secondary-btn">Secondary Accent</button>
+                <a href="profile.html" class="btn btn-secondary btn-sm">Edit User Data</a>
+              </div>
+            </div>
+            <div class="compat-bar" style="margin-top:1rem;">
+              <div class="compat-bar-fill" style="width:92%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/settings.js"></script>
+</body>
+</html>

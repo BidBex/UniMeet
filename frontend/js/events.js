@@ -122,7 +122,7 @@ async function openEventDetailsModal(eventId) {
           }
           try {
             await API.likeEvent(ev.id);
-            showToast("Event liked!", "success");
+            showToast("Saved to Matches & message received from creator!", "success");
             close();
             loadEventsList();
           } catch (err) {
@@ -229,7 +229,7 @@ async function loadEventsList() {
         }
         try {
           await API.likeEvent(Number(btn.dataset.quickLike));
-          showToast("Event liked!", "success");
+          showToast("Saved to Matches & creator messaged you!", "success");
           loadEventsList();
         } catch (err) {
           showToast(err.message, "error");
@@ -311,10 +311,10 @@ async function initCreateEventPage() {
         image_url: presetSelect.value,
         description: qs("#ce-description").value.trim(),
       });
-      showToast(`"${created.title}" published!`, "success");
+      showToast(`"${created.title}" published! Check Messages for student replies.`, "success");
       window.setTimeout(() => {
         window.location.href = "events.html";
-      }, 600);
+      }, 800);
     } catch (err) {
       feedback.hidden = false;
       feedback.className = "form-alert form-alert-error";

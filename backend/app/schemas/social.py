@@ -39,6 +39,13 @@ class LikeResponse(BaseModel):
     match: Optional[MatchOut] = None
 
 
+class LikedEventOut(BaseModel):
+    event: EventOut
+    creator: UserPublicOut
+    liked_at: datetime
+    conversation_id: Optional[int] = None
+
+
 class GroupCreate(BaseModel):
     name: str = Field(min_length=3, max_length=120)
     description: str = Field(min_length=5, max_length=2000)

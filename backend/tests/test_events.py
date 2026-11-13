@@ -71,6 +71,32 @@ def test_event_crud_capacity_and_duplicate_likes(client):
     like_dup = client.post(f"/api/events/{event_id}/like", headers=h2)
     assert like_dup.status_code == 409
 
+    # Liked event appears in Matches and includes a message from the event creator
+    liked_matches = client.get("/api/matches/liked-events", headers=h2)
+    assert liked_matches.status_code == 200
+    liked_items = liked_matches.json()
+    assert len(liked_items) == 1
+    assert liked_items[0]["event"]["id"] == event_id
+    conv_id = liked_items[0]["conversation_id"]
+    assert conv_id is not None
+    detail = client.get(f"/api/messages/conversations/{conv_id}", headers=h2)
+    assert detail.status_code == 200
+    assert any(
+        m["sender_id"] == u1["user"]["id"] and "Piata Unirii Jazz Night" in m["content"]
+        for m in detail.json()["messages"]
+    )
+
+    # Host received inquiry messages related to their newly created event
+    host_convs = client.get("/api/messages/conversations", headers=h1)
+    assert host_convs.status_code == 200
+    assert any("Piata Unirii Jazz Night" in (c["last_message"] or "") for c in host_convs.json())
+
+    # Unliking removes it from Matches
+    unlike = client.delete(f"/api/events/{event_id}/like", headers=h2)
+    assert unlike.status_code == 200
+    assert unlike.json()["like_count"] == 0
+    assert client.get("/api/matches/liked-events", headers=h2).json() == []
+
     # Search and filter
     search = client.get("/api/events?q=Jazz&city=Timisoara&category=Concerts")
     assert search.status_code == 200

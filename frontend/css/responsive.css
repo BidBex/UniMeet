@@ -88,7 +88,7 @@
     height: 50px;
     margin: 0 -1rem 1rem;
     padding: 0 1rem;
-    background: rgba(255, 255, 255, 0.94);
+    background: var(--color-nav-bg);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-border);
   }
@@ -101,13 +101,13 @@
 
   .mobile-bottom-nav {
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     height: 56px;
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--color-nav-bg);
     backdrop-filter: blur(8px);
     border-top: 1px solid var(--color-border);
     z-index: 40;
@@ -118,15 +118,20 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.15rem;
+    gap: 0.12rem;
     min-height: 44px;
+    padding: 0 2px;
     color: var(--color-text-secondary);
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 600;
   }
 
   .bottom-nav-link.is-active {
     color: var(--color-primary);
+  }
+
+  .color-swatch-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .toast-container {

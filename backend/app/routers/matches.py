@@ -5,15 +5,15 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models.event import Event
+from app.models.event import Event, EventLike
 from app.models.match import Match, UserLike
 from app.models.message import Conversation, ConversationParticipant
 from app.models.user import User
 from app.schemas import MessageResponse
-from app.schemas.social import LikeResponse, MatchOut, UserLikeRequest
+from app.schemas.social import LikedEventOut, LikeResponse, MatchOut, UserLikeRequest
 from app.security.auth import get_current_user
 from app.services.compatibility import compute_compatibility
-from app.services.serializers import get_blocked_user_ids, is_blocked_between, user_to_public
+from app.services.serializers import event_to_out, get_blocked_user_ids, is_blocked_between, user_to_public
 
 router = APIRouter(prefix="/matches", tags=["Matching"])
 
@@ -42,6 +42,7 @@ def _find_or_create_match_conversation(
             .filter(
                 Conversation.id.in_(user1_convs),
                 Conversation.group_id.is_(None),
+                Conversation.title.is_(None),
                 ConversationParticipant.user_id == user2_id,
             )
             .first()
@@ -207,6 +208,76 @@ def list_matches(
         if other_id in blocked:
             continue
         results.append(_serialize_match(db, match, current_user))
+    return results
+
+
+@router.get("/liked-events", response_model=List[LikedEventOut], summary="List current user's liked events saved in Matches")
+def list_liked_events(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    blocked = get_blocked_user_ids(db, current_user.id)
+    likes = (
+        db.query(EventLike)
+        .filter(EventLike.user_id == current_user.id)
+        .order_by(EventLike.created_at.desc())
+        .all()
+    )
+
+    my_conv_ids = {
+        cp.conversation_id
+        for cp in db.query(ConversationParticipant)
+        .filter(ConversationParticipant.user_id == current_user.id)
+        .all()
+    }
+
+    results: List[LikedEventOut] = []
+    for like in likes:
+        ev = like.event
+        if not ev or not ev.is_active or ev.creator_id in blocked:
+            continue
+
+        conv_id: Optional[int] = None
+        if ev.creator_id != current_user.id and my_conv_ids:
+            event_title_key = f"Event: {ev.title}"
+            shared_conv = (
+                db.query(Conversation)
+                .join(ConversationParticipant, ConversationParticipant.conversation_id == Conversation.id)
+                .filter(
+                    Conversation.id.in_(my_conv_ids),
+                    Conversation.group_id.is_(None),
+                    Conversation.title == event_title_key,
+                    ConversationParticipant.user_id == ev.creator_id,
+                )
+                .first()
+            )
+            if not shared_conv:
+                shared_conv = (
+                    db.query(Conversation)
+                    .join(ConversationParticipant, ConversationParticipant.conversation_id == Conversation.id)
+                    .filter(
+                        Conversation.id.in_(my_conv_ids),
+                        Conversation.group_id.is_(None),
+                        ConversationParticipant.user_id == ev.creator_id,
+                    )
+                    .first()
+                )
+            if shared_conv:
+                conv_id = shared_conv.id
+
+        compat = (
+            None
+            if ev.creator_id == current_user.id
+            else compute_compatibility(db, current_user, ev.creator)
+        )
+        results.append(
+            LikedEventOut(
+                event=event_to_out(db, ev, current_user_id=current_user.id),
+                creator=user_to_public(db, ev.creator, compatibility=compat),
+                liked_at=like.created_at,
+                conversation_id=conv_id,
+            )
+        )
     return results
 
 

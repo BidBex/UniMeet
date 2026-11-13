@@ -82,6 +82,8 @@ class AuthResponse(BaseModel):
 
 
 class UserUpdateRequest(BaseModel):
+    username: Optional[str] = Field(default=None, min_length=3, max_length=50, pattern=r"^[A-Za-z0-9_.-]+$")
+    email: Optional[EmailStr] = None
     first_name: Optional[str] = Field(default=None, min_length=1, max_length=80)
     last_name: Optional[str] = Field(default=None, min_length=1, max_length=80)
     age: Optional[int] = Field(default=None, ge=16, le=120)

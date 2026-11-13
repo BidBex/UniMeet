@@ -19,10 +19,16 @@
     <main id="main-content" class="app-main">
       <div class="page-header">
         <div>
-          <h1>Mutual Matches</h1>
-          <p class="muted-small">People who matched with you for shared events.</p>
+          <h1>Matches &amp; Liked Events</h1>
+          <p class="muted-small">People you matched with and events you liked — message organizers directly.</p>
         </div>
         <a href="discover.html" class="btn btn-primary">Keep discovering</a>
+      </div>
+
+      <div class="segmented-tabs" role="tablist" aria-label="Match sections">
+        <button type="button" class="tab-btn is-active" data-match-tab="all" role="tab" aria-selected="true">All</button>
+        <button type="button" class="tab-btn" data-match-tab="events" role="tab" aria-selected="false">Liked Events</button>
+        <button type="button" class="tab-btn" data-match-tab="people" role="tab" aria-selected="false">People Matches</button>
       </div>
 
       <div id="matches-container"></div>

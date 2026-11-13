@@ -371,7 +371,7 @@ async function handleSwipe(direction) {
 
       if (state.activeTab === "events") {
         await API.likeEvent(item.id);
-        showToast(`Liked "${item.title}"!`, "success");
+        showToast(`Saved "${item.title}" to Matches & creator messaged you!`, "success");
       } else if (state.activeTab === "people") {
         const eventId = Number(qs("#disc-event-context").value);
         if (!eventId) {

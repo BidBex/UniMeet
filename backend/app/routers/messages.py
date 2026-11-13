@@ -81,7 +81,11 @@ def _serialize_conversation(db: Session, conv: Conversation, current_user: User)
         )
         if other_cp and other_cp.user:
             other_user_out = user_to_public(db, other_cp.user)
-            title = f"{other_cp.user.first_name} {other_cp.user.last_name}"
+            other_name = f"{other_cp.user.first_name} {other_cp.user.last_name}"
+            if conv.title and conv.title.startswith("Event: "):
+                title = f"{other_name} · {conv.title[7:]}"
+            else:
+                title = other_name
 
     last_msg = (
         db.query(Message)

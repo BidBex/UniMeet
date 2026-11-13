@@ -7,13 +7,51 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.event import Event, EventLike, EventParticipant
+from app.models.message import Conversation, ConversationParticipant, Message
 from app.models.user import User
 from app.schemas import MessageResponse
 from app.schemas.event import EventCreate, EventListOut, EventOut, EventUpdate, ParticipantOut
 from app.security.auth import get_current_user, get_optional_current_user
-from app.services.serializers import event_to_out, get_blocked_user_ids, user_to_public
+from app.services.serializers import event_to_out, get_blocked_user_ids, is_blocked_between, user_to_public
 
 router = APIRouter(prefix="/events", tags=["Events"])
+
+
+def _find_or_create_event_conversation(
+    db: Session,
+    user1_id: int,
+    user2_id: int,
+    event_title: str,
+) -> Conversation:
+    title_key = f"Event: {event_title}"[:150]
+    u1_convs = {
+        cp.conversation_id
+        for cp in db.query(ConversationParticipant)
+        .filter(ConversationParticipant.user_id == user1_id)
+        .all()
+    }
+    if u1_convs:
+        existing = (
+            db.query(Conversation)
+            .join(ConversationParticipant, ConversationParticipant.conversation_id == Conversation.id)
+            .filter(
+                Conversation.id.in_(u1_convs),
+                Conversation.group_id.is_(None),
+                Conversation.title == title_key,
+                ConversationParticipant.user_id == user2_id,
+            )
+            .first()
+        )
+        if existing:
+            return existing
+
+    conv = Conversation(title=title_key)
+    db.add(conv)
+    db.flush()
+    db.add(ConversationParticipant(conversation_id=conv.id, user_id=user1_id))
+    db.add(ConversationParticipant(conversation_id=conv.id, user_id=user2_id))
+    db.flush()
+    return conv
 
 
 @router.get("", response_model=EventListOut, summary="List and filter events with pagination")
@@ -131,6 +169,39 @@ def create_event(
 
     # Creator automatically joins their own outing
     db.add(EventParticipant(event_id=event.id, user_id=current_user.id, status="going"))
+
+    # Generate realistic student inquiry messages related to the new event
+    blocked_ids = get_blocked_user_ids(db, current_user.id)
+    excluded_ids = blocked_ids | {current_user.id}
+    candidates = (
+        db.query(User)
+        .filter(User.is_active.is_(True), ~User.id.in_(excluded_ids))
+        .all()
+    )
+    if candidates:
+        candidates.sort(
+            key=lambda u: (
+                (u.city or "").lower() == event.city.lower(),
+                bool(event.university and u.university and u.university.lower() == event.university.lower()),
+                u.id,
+            ),
+            reverse=True,
+        )
+        prompts = [
+            f'Hey {current_user.first_name}! Just saw your new {event.category.lower()} outing "{event.title}" in {event.city}. What time should we meet at {event.location}?',
+            f'Hi {current_user.first_name}! "{event.title}" sounds awesome — are spots still open if I bring a classmate from campus?',
+        ]
+        for peer, msg_text in zip(candidates[:2], prompts):
+            conv = _find_or_create_event_conversation(db, current_user.id, peer.id, event.title)
+            db.add(
+                Message(
+                    conversation_id=conv.id,
+                    sender_id=peer.id,
+                    content=msg_text,
+                    is_read=False,
+                )
+            )
+
     db.commit()
 
     return event_to_out(db, event, current_user_id=current_user.id)
@@ -282,6 +353,47 @@ def like_event(
         )
 
     db.add(EventLike(event_id=event_id, user_id=current_user.id))
+
+    if event.creator_id != current_user.id and not is_blocked_between(db, current_user.id, event.creator_id):
+        conv = _find_or_create_event_conversation(db, current_user.id, event.creator_id, event.title)
+        db.add(
+            Message(
+                conversation_id=conv.id,
+                sender_id=event.creator_id,
+                content=(
+                    f'Hey {current_user.first_name}! Thanks for liking "{event.title}" in {event.city}. '
+                    f'Want to meet up near {event.location} before it starts?'
+                ),
+                is_read=False,
+            )
+        )
+
+    db.commit()
+    return event_to_out(db, event, current_user_id=current_user.id)
+
+
+@router.delete("/{event_id}/like", response_model=EventOut, summary="Remove event like")
+def unlike_event(
+    event_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    event = db.query(Event).filter(Event.id == event_id, Event.is_active.is_(True)).first()
+    if not event:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found.")
+
+    existing = (
+        db.query(EventLike)
+        .filter(EventLike.event_id == event_id, EventLike.user_id == current_user.id)
+        .first()
+    )
+    if not existing:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="You have not liked this event.",
+        )
+
+    db.delete(existing)
     db.commit()
     return event_to_out(db, event, current_user_id=current_user.id)
 

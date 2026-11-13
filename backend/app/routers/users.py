@@ -43,9 +43,47 @@ def update_my_profile(
     db: Session = Depends(get_db),
 ):
     updates = payload.model_dump(exclude_unset=True)
+
+    if "email" in updates and updates["email"] is not None:
+        normalized_email = updates["email"].strip().lower()
+        existing_email = (
+            db.query(User)
+            .filter(User.email.ilike(normalized_email), User.id != current_user.id)
+            .first()
+        )
+        if existing_email:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="An account with this email already exists.",
+            )
+        updates["email"] = normalized_email
+
+    if "username" in updates and updates["username"] is not None:
+        cleaned_username = updates["username"].strip()
+        existing_username = (
+            db.query(User)
+            .filter(User.username.ilike(cleaned_username), User.id != current_user.id)
+            .first()
+        )
+        if existing_username:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="This username is already taken.",
+            )
+        updates["username"] = cleaned_username
+
     for field, value in updates.items():
         if isinstance(value, str):
-            value = value.strip() or None
+            cleaned = value.strip()
+            if field in ("first_name", "last_name", "username", "email"):
+                if not cleaned:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"{field.replace('_', ' ').title()} cannot be blank.",
+                    )
+                value = cleaned
+            else:
+                value = cleaned or None
         setattr(current_user, field, value)
 
     db.add(current_user)

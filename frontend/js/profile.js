@@ -2,7 +2,7 @@
  * Profile overview, editing, interest picker, upcoming events/groups, and blocked users management (profile.html).
  */
 import { API, setFallbackToken } from "./api.js";
-import { requireAuthenticatedUser } from "./navigation.js";
+import { renderDashboardShell, requireAuthenticatedUser } from "./navigation.js";
 import { escapeHtml, formatDateTime, getInitials, qs, qsa, showToast } from "./utils.js";
 
 const profileState = {
@@ -74,6 +74,17 @@ async function renderOverviewTab() {
               <div class="field">
                 <label for="pe-last">Last name</label>
                 <input id="pe-last" type="text" required value="${escapeHtml(u.last_name)}">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="pe-username">Username</label>
+                <input id="pe-username" type="text" required minlength="3" maxlength="50" pattern="[A-Za-z0-9_.\\-]+" value="${escapeHtml(u.username)}">
+              </div>
+              <div class="field">
+                <label for="pe-email">Email</label>
+                <input id="pe-email" type="email" required value="${escapeHtml(u.email)}">
               </div>
             </div>
 
@@ -153,12 +164,15 @@ async function renderOverviewTab() {
       profileState.user = await API.updateMyProfile({
         first_name: qs("#pe-first", container).value.trim(),
         last_name: qs("#pe-last", container).value.trim(),
+        username: qs("#pe-username", container).value.trim(),
+        email: qs("#pe-email", container).value.trim(),
         age: ageRaw ? Number(ageRaw) : null,
         city: qs("#pe-city", container).value.trim() || null,
         university: qs("#pe-uni", container).value.trim() || null,
         profile_picture: qs("#pe-pic", container).value.trim() || null,
         bio: qs("#pe-bio", container).value.trim() || null,
       });
+      renderDashboardShell(profileState.user);
       showToast("Profile updated!", "success");
       renderOverviewTab();
     } catch (err) {

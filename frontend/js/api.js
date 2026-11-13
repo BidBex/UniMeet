@@ -142,6 +142,7 @@ export const API = {
   joinEvent: (eventId) => apiRequest(`/events/${eventId}/join`, { method: "POST" }),
   leaveEvent: (eventId) => apiRequest(`/events/${eventId}/leave`, { method: "DELETE" }),
   likeEvent: (eventId) => apiRequest(`/events/${eventId}/like`, { method: "POST" }),
+  unlikeEvent: (eventId) => apiRequest(`/events/${eventId}/like`, { method: "DELETE" }),
   getEventParticipants: (eventId) => apiRequest(`/events/${eventId}/participants`, { skipAuthRedirect: true }),
 
   // Matching
@@ -151,6 +152,7 @@ export const API = {
       body: JSON.stringify({ receiver_id: receiverId, event_id: eventId }),
     }),
   listMatches: () => apiRequest("/matches"),
+  listLikedEvents: () => apiRequest("/matches/liked-events"),
   getMatch: (matchId) => apiRequest(`/matches/${matchId}`),
   deleteMatch: (matchId) => apiRequest(`/matches/${matchId}`, { method: "DELETE" }),
 
