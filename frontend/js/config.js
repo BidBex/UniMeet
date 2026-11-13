@@ -2,7 +2,7 @@
  * Centralized frontend configuration for UniMeet.
  * Supports both same-origin FastAPI serving (http://localhost:8000) and standalone static server.
  */
-const standaloneStaticPorts = new Set(["5500", "5173", "3000", "4173"]);
+const standaloneStaticPorts = new Set(["5500", "5173", "4173"]);
 const isSameOriginServer =
   window.location.protocol.startsWith("http") &&
   !standaloneStaticPorts.has(window.location.port);
