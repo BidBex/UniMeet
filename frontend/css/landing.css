@@ -1,0 +1,874 @@
+/* UniMeet Landing Page Stylesheet — Dark Visual Identity, Green Primary & Subtle Purple Accent */
+
+body[data-page="landing"] {
+  --color-bg-light: #111412;
+  --color-bg-surface: #191d1a;
+  --color-bg-subtle: #202521;
+  --color-bg-dark: #0c0e0d;
+  --color-header-bg: rgba(17, 20, 18, 0.9);
+  --color-nav-bg: rgba(25, 29, 26, 0.96);
+  --color-text: #f2efe8;
+  --color-text-secondary: #a8aea7;
+  --color-border: #2c332e;
+  --color-primary: #4da982;
+  --color-primary-hover: #3b936e;
+  --color-primary-tint: rgba(77, 169, 130, 0.14);
+  --color-primary-border: rgba(77, 169, 130, 0.34);
+  --color-on-primary: #0d1712;
+  --color-accent-purple: #a78bfa;
+  --color-accent-purple-strong: #8568cf;
+  --color-accent-purple-tint: rgba(133, 104, 207, 0.16);
+  --color-accent-purple-border: rgba(167, 139, 250, 0.32);
+  --shadow-card: 0 6px 22px rgba(0, 0, 0, 0.28);
+
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
+  overflow-x: clip;
+}
+
+body[data-page="landing"] main {
+  overflow-x: clip;
+}
+
+/* ── Landing Navigation Header ─────────────────────────── */
+body[data-page="landing"] .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--color-header-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.landing-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 64px;
+}
+
+.landing-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.landing-nav-links a {
+  color: var(--color-text-secondary);
+  font-size: 0.93rem;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.landing-nav-links a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.landing-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.landing-nav-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.landing-nav-login:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+}
+
+.landing-nav-cta {
+  min-height: 40px;
+  padding: 0.48rem 1rem;
+  font-size: 0.9rem;
+}
+
+.landing-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.landing-menu-btn:hover {
+  background: var(--color-bg-subtle);
+  border-color: var(--color-primary-border);
+}
+
+.landing-mobile-panel {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  padding: 0.85rem 0 1.25rem;
+}
+
+.landing-mobile-panel[hidden] {
+  display: none;
+}
+
+.landing-mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.landing-mobile-links a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.landing-mobile-links a:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-primary);
+}
+
+.landing-mobile-auth {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+/* ── Hero Section ──────────────────────────────────────── */
+body[data-page="landing"] .landing-hero {
+  padding: 2.5rem 0 3rem;
+}
+
+.landing-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+.landing-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.landing-hero-kicker {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+.landing-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.15rem, 4.1vw, 3.55rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+  color: var(--color-text);
+  margin: 0 0 1rem;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+.landing-hero-subtitle {
+  font-size: 1.06rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  max-width: 50ch;
+  margin: 0 0 1.5rem;
+}
+
+.landing-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.landing-hero-note {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-accent-purple);
+  margin: 0;
+}
+
+.landing-hero-media {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  min-height: 320px;
+  max-height: 430px;
+}
+
+.landing-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.landing-hero-media-scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 36%;
+  background: linear-gradient(to top, rgba(17, 20, 18, 0.58), transparent);
+  pointer-events: none;
+}
+
+/* ── Shared Landing Section Layout ─────────────────────── */
+body[data-page="landing"] .landing-section {
+  padding: 3.25rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.landing-section-alt {
+  background: rgba(25, 29, 26, 0.42);
+}
+
+.landing-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.landing-section-intro {
+  max-width: 58ch;
+}
+
+.landing-section-intro h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.45rem;
+}
+
+.landing-section-intro p {
+  margin-bottom: 0;
+  font-size: 0.98rem;
+}
+
+/* ── Section 4: What Do You Want To Do? (4 Cards) ──────── */
+.intent-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.intent-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  min-width: 0;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.intent-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-border);
+}
+
+.intent-card-purple:hover {
+  border-color: var(--color-accent-purple-border);
+}
+
+.intent-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-border);
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.intent-card-purple .intent-icon {
+  background: var(--color-accent-purple-tint);
+  border-color: var(--color-accent-purple-border);
+  color: var(--color-accent-purple);
+}
+
+.intent-card h3 {
+  font-size: 1.12rem;
+  margin-bottom: 0.45rem;
+}
+
+.intent-card p {
+  font-size: 0.94rem;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.intent-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 40px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.intent-card-purple .intent-link {
+  color: var(--color-accent-purple);
+}
+
+.intent-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ── Section 5: Live Event Discovery Preview ───────────── */
+.landing-events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.landing-event-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-width: 0;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.landing-event-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-border);
+}
+
+.landing-event-card .media-frame {
+  aspect-ratio: 16 / 10;
+}
+
+.landing-event-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem;
+  min-width: 0;
+}
+
+.landing-event-body h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.landing-event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1.15rem;
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+}
+
+.landing-event-actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* ── Section 6: 3-Step Matching Process ────────────────── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.step-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  min-width: 0;
+}
+
+.step-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.step-index {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.step-icon {
+  color: var(--color-text-secondary);
+}
+
+.step-card h3 {
+  font-size: 1.08rem;
+  margin-bottom: 0.45rem;
+}
+
+.step-card p {
+  margin-bottom: 0;
+  font-size: 0.94rem;
+}
+
+.steps-context-note {
+  margin-top: 1.25rem;
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+  max-width: 68ch;
+}
+
+/* ── Section 7: Going Solo Spotlight ───────────────────── */
+.solo-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 2.25rem;
+  align-items: stretch;
+}
+
+.solo-visual {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  min-height: 290px;
+}
+
+.solo-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solo-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.solo-kicker {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-accent-purple);
+  margin: 0 0 0.55rem;
+}
+
+.solo-copy h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  margin-bottom: 0.7rem;
+}
+
+.solo-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.solo-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.solo-points svg {
+  color: var(--color-accent-purple);
+  flex-shrink: 0;
+  margin-top: 0.22rem;
+}
+
+.btn-purple-outline {
+  background: var(--color-accent-purple-tint);
+  color: var(--color-accent-purple);
+  border: 1px solid var(--color-accent-purple-border);
+}
+
+.btn-purple-outline:hover:not(:disabled) {
+  background: rgba(133, 104, 207, 0.26);
+  border-color: var(--color-accent-purple);
+  color: #ede9fe;
+}
+
+/* ── Section 8: University Community ─────────────────────── */
+.community-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 2rem;
+  align-items: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+}
+
+.community-panel h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  margin-bottom: 0.65rem;
+}
+
+.community-campuses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  border-left: 1px solid var(--color-border);
+  padding-left: 1.75rem;
+}
+
+.campus-row {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.campus-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.campus-row strong {
+  color: var(--color-text);
+  font-size: 0.96rem;
+}
+
+.campus-row span {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* ── Section 9: Safety ─────────────────────────────────── */
+.safety-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.safety-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  min-width: 0;
+}
+
+.safety-icon {
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.safety-card h3 {
+  font-size: 1.02rem;
+  margin-bottom: 0.4rem;
+}
+
+.safety-card p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+/* ── Section 10: Final CTA ─────────────────────────────── */
+.final-cta-box {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-primary-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+}
+
+.final-cta-copy {
+  max-width: 52ch;
+}
+
+.final-cta-copy h2 {
+  font-size: clamp(1.55rem, 2.6vw, 2.2rem);
+  margin-bottom: 0.5rem;
+}
+
+.final-cta-copy p {
+  margin-bottom: 0;
+}
+
+.final-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+/* ── Section 11: Footer ────────────────────────────────── */
+body[data-page="landing"] .site-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-dark);
+  padding: 2.5rem 0 calc(2.25rem + var(--safe-bottom));
+}
+
+.landing-footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.landing-footer-brand {
+  max-width: 34ch;
+}
+
+.landing-footer-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, auto));
+  gap: 1.75rem 2.5rem;
+}
+
+.landing-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.landing-footer-heading {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.landing-footer-col a,
+.landing-footer-link-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.landing-footer-col a:hover,
+.landing-footer-link-btn:hover {
+  color: var(--color-primary);
+}
+
+.landing-footer-bottom {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* ── Responsive Breakpoints (1024px, 768px, 430px, 384px, 360px, 320px) ── */
+@media (max-width: 1024px) {
+  .intent-grid,
+  .safety-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-events-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-hero-grid,
+  .solo-split {
+    gap: 1.75rem;
+  }
+
+  .community-panel {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .community-campuses {
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    padding-left: 0;
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-nav-links,
+  .landing-nav-actions {
+    display: none;
+  }
+
+  .landing-menu-btn {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 768px) {
+  body[data-page="landing"] .landing-hero {
+    padding: 1.75rem 0 2.25rem;
+  }
+
+  body[data-page="landing"] .landing-section {
+    padding: 2.35rem 0;
+  }
+
+  .landing-hero-grid,
+  .solo-split,
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-hero-media {
+    min-height: 220px;
+    max-height: 280px;
+  }
+
+  .solo-visual {
+    min-height: 220px;
+    max-height: 280px;
+  }
+
+  .community-panel,
+  .final-cta-box {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .intent-grid,
+  .landing-events-grid,
+  .safety-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-hero-title {
+    font-size: clamp(1.9rem, 7.5vw, 2.4rem);
+  }
+
+  .landing-hero-actions,
+  .final-cta-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .landing-hero-actions .btn,
+  .final-cta-actions .btn,
+  .solo-copy .btn {
+    width: 100%;
+  }
+
+  .landing-footer-columns {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .landing-footer-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  body[data-page="landing"] .container {
+    padding: 0 1rem;
+  }
+
+  .landing-top-bar {
+    min-height: 58px;
+  }
+
+  .landing-hero-media,
+  .solo-visual {
+    min-height: 200px;
+    max-height: 240px;
+  }
+
+  .landing-mobile-auth {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .community-panel,
+  .final-cta-box,
+  .intent-card,
+  .step-card,
+  .safety-card {
+    padding: 1.1rem;
+  }
+
+  .landing-event-body {
+    padding: 1.05rem;
+  }
+}

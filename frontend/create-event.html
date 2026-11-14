@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Create an outing or post a Going Solo status on UniMeet.">
+  <title>Create an Outing — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="create-event">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-layout" id="app-shell">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
+    <main id="main-content" class="app-main">
+      <div class="page-header">
+        <div>
+          <h1>Create an Outing</h1>
+          <p class="muted-small">Host a new event or announce that you want company for an existing one.</p>
+        </div>
+        <a href="events.html" class="btn btn-secondary">Back to events</a>
+      </div>
+
+      <div class="cards-grid-2">
+        <section class="card">
+          <div class="card-body">
+            <h2>Host a New Event</h2>
+            <div id="create-event-feedback" class="form-alert" hidden></div>
+
+            <form id="create-event-form" class="stack-form" novalidate>
+              <div class="field">
+                <label for="ce-title">Event title</label>
+                <input id="ce-title" type="text" required minlength="3" maxlength="160" placeholder="e.g. Friday Indie Night at Bastion">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-category">Category</label>
+                  <select id="ce-category" required></select>
+                </div>
+                <div class="field">
+                  <label for="ce-max">Max participants (optional)</label>
+                  <input id="ce-max" type="number" min="2" max="5000" placeholder="e.g. 20">
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-location">Venue / Meeting spot</label>
+                  <input id="ce-location" type="text" required minlength="2" placeholder="e.g. Piata Unirii">
+                </div>
+                <div class="field">
+                  <label for="ce-city">City</label>
+                  <input id="ce-city" type="text" required minlength="2" value="Timisoara">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ce-university">University (optional)</label>
+                <input id="ce-university" type="text" placeholder="e.g. Politehnica University of Timisoara">
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="ce-start">Start date &amp; time</label>
+                  <input id="ce-start" type="datetime-local" required>
+                </div>
+                <div class="field">
+                  <label for="ce-end">End date &amp; time (optional)</label>
+                  <input id="ce-end" type="datetime-local">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="ce-image-preset">Cover image preset</label>
+                <select id="ce-image-preset"></select>
+              </div>
+
+              <div class="field">
+                <label for="ce-image-file">Or upload a custom cover image (optional, max 5 MB)</label>
+                <div class="upload-field-row">
+                  <input id="ce-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                  <button type="button" class="btn btn-secondary btn-sm" id="ce-image-clear-btn" hidden>Use preset instead</button>
+                </div>
+                <div id="ce-upload-progress" class="upload-progress-track" hidden>
+                  <div id="ce-upload-progress-bar" class="upload-progress-bar"></div>
+                </div>
+                <span id="ce-upload-status" class="muted-small" aria-live="polite" hidden></span>
+                <div id="ce-image-preview" class="upload-preview-box" hidden></div>
+              </div>
+
+              <div class="field">
+                <label for="ce-description">Description</label>
+                <textarea id="ce-description" rows="4" required minlength="10" placeholder="Share what to expect, ticket info, and where to meet..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="ce-submit-btn">Publish outing</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-body">
+            <h2>Going Solo Announcement</h2>
+            <p>Have a free evening and want to join someone going to an upcoming event? Post a temporary Going Solo status.</p>
+            <div id="create-solo-feedback" class="form-alert" hidden></div>
+
+            <form id="create-solo-form" class="stack-form" novalidate>
+              <div class="field">
+                <label for="solo-event-select">Choose event</label>
+                <select id="solo-event-select" required></select>
+              </div>
+              <div class="field">
+                <label for="solo-message">Personal note</label>
+                <textarea id="solo-message" rows="3" required minlength="5" maxlength="500" placeholder="I'd love to go to this concert — anyone want to meet beforehand for coffee?"></textarea>
+              </div>
+              <div class="field">
+                <label for="solo-expires">Expires in</label>
+                <select id="solo-expires">
+                  <option value="24">24 hours</option>
+                  <option value="48" selected>48 hours</option>
+                  <option value="72">72 hours</option>
+                  <option value="168">7 days</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-coral" id="solo-submit-btn">Post Going Solo status</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/events.js"></script>
+</body>
+</html>

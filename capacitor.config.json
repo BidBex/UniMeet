@@ -1,0 +1,11 @@
+{
+  "appId": "com.unimeet.app",
+  "appName": "UniMeet",
+  "webDir": "android-web",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

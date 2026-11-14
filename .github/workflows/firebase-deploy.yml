@@ -1,0 +1,63 @@
+name: Deploy Firebase Backend
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_targets:
+        description: "Firebase targets to deploy (rules+indexes+storage or all)"
+        required: true
+        default: "firestore:rules,firestore:indexes,storage"
+        type: choice
+        options:
+          - "firestore:rules,firestore:indexes,storage"
+          - "firestore:rules,firestore:indexes,storage,hosting"
+          - "firestore:rules,firestore:indexes,storage,functions,hosting"
+
+jobs:
+  deploy-firebase:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate FIREBASE_SERVICE_ACCOUNT secret
+        env:
+          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SA" ]; then
+            echo "::error::Missing GitHub repository secret FIREBASE_SERVICE_ACCOUNT. Download a Firebase Admin SDK JSON key in Firebase Console -> Project Settings -> Service accounts, then add it in GitHub -> Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          printf '%s' "$FIREBASE_SA" > "$RUNNER_TEMP/firebase-sa.json"
+          python3 -m json.tool "$RUNNER_TEMP/firebase-sa.json" > /dev/null || {
+            echo "::error::FIREBASE_SERVICE_ACCOUNT is not valid JSON. Paste the full contents of the Firebase Admin SDK .json file."
+            exit 1
+          }
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/firebase-sa.json" >> "$GITHUB_ENV"
+
+      - name: Install root dependencies and build web bundle
+        if: contains(inputs.deploy_targets, 'hosting')
+        run: |
+          npm install --ignore-scripts --legacy-peer-deps
+          npm run build
+
+      - name: Install Cloud Functions dependencies
+        if: contains(inputs.deploy_targets, 'functions')
+        run: npm --prefix functions install --no-audit --no-fund
+
+      - name: Deploy selected targets to Firebase (ardent-lens-35wls)
+        run: |
+          npx --yes firebase-tools@15 deploy \
+            --project ardent-lens-35wls \
+            --only "${{ inputs.deploy_targets }}" \
+            --non-interactive \
+            --force
+
+      - name: Clean up temporary credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/firebase-sa.json"

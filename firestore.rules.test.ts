@@ -1,0 +1,212 @@
+/**
+ * Adversarial Security Rules Verification Spec ("Dirty Dozen" Payloads)
+ * Run against Firebase Emulator Suite (@firebase/rules-unit-testing) when emulator is available.
+ */
+import fs from "node:fs";
+import path from "node:path";
+
+export const DIRTY_DOZEN_CASES = [
+  {
+    id: 1,
+    name: "Identity spoofing on user profile create",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: "users/attacker_1",
+    payload: {
+      uid: "victim_uid",
+      username: "victim",
+      displayName: "Victim User",
+      firstName: "Victim",
+      lastName: "User",
+      interests: [],
+      hobbies: [],
+      likedCategories: [],
+      isActive: true,
+      isVerified: true,
+      isSample: false,
+    },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 2,
+    name: "Privilege escalation / shadow field on user update",
+    actorUid: "attacker_1",
+    operation: "update",
+    path: "users/attacker_1",
+    payload: { isVerified: true, role: "admin" },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 3,
+    name: "Cross-user PII read on private/info",
+    actorUid: "attacker_1",
+    operation: "get",
+    path: "users/victim_uid/private/info",
+    payload: null,
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 4,
+    name: "Ghost field injection on event create",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: "events/ev_ghost",
+    payload: {
+      eventId: "ev_ghost",
+      title: "Valid Looking Event",
+      description: "Long enough valid description for the event.",
+      location: "Campus Plaza",
+      city: "Timisoara",
+      date: "2026-12-01",
+      startTime: "2026-12-01T18:00:00Z",
+      category: "Social",
+      organizerId: "attacker_1",
+      organizerName: "Attacker",
+      participantCount: 1,
+      likeCount: 0,
+      isActive: true,
+      isSample: false,
+      featuredRank: 999,
+    },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 5,
+    name: "Participant count inflation without atomic participant doc",
+    actorUid: "attacker_1",
+    operation: "update",
+    path: "events/ev_1",
+    payload: { participantCount: 500 },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 6,
+    name: "Sender spoofing / self-like in userLikes",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: "userLikes/victim_uid__attacker_1__ev_1",
+    payload: { senderId: "victim_uid", receiverId: "attacker_1", eventId: "ev_1" },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 7,
+    name: "Unilateral match creation without reciprocal like",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: "matches/attacker_1__victim_uid__ev_1",
+    payload: {
+      matchId: "attacker_1__victim_uid__ev_1",
+      userIds: ["attacker_1", "victim_uid"],
+      eventId: "ev_1",
+      eventTitle: "Indie Concert",
+      compatibilityScore: 95,
+      status: "active",
+    },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 8,
+    name: "Terminal state reopening from unmatched to active",
+    actorUid: "attacker_1",
+    operation: "update",
+    path: "matches/attacker_1__victim_uid__ev_1",
+    payload: { status: "active" },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 9,
+    name: "Non-participant reading private chat messages",
+    actorUid: "eve",
+    operation: "list",
+    path: "chats/dm_alice__bob/messages",
+    payload: null,
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 10,
+    name: "Message senderId impersonation inside active chat",
+    actorUid: "eve",
+    operation: "create",
+    path: "chats/dm_alice__eve/messages/msg_forged",
+    payload: {
+      messageId: "msg_forged",
+      chatId: "dm_alice__eve",
+      senderId: "alice",
+      content: "Spoofed message",
+      readBy: ["alice"],
+      isUnsent: false,
+      hiddenFor: [],
+    },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 11,
+    name: "Client-forged backdated createdAt timestamp",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: "events/ev_backdated",
+    payload: {
+      eventId: "ev_backdated",
+      title: "Backdated Event",
+      description: "Valid description with backdated timestamp.",
+      location: "Main Hall",
+      city: "Timisoara",
+      date: "2026-12-01",
+      startTime: "2026-12-01T18:00:00Z",
+      category: "Social",
+      organizerId: "attacker_1",
+      organizerName: "Attacker",
+      participantCount: 1,
+      likeCount: 0,
+      isActive: true,
+      isSample: false,
+      createdAt: "1999-01-01T00:00:00Z",
+      updatedAt: "1999-01-01T00:00:00Z",
+    },
+    expected: "PERMISSION_DENIED",
+  },
+  {
+    id: 12,
+    name: "ID poisoning / oversized payload attack",
+    actorUid: "attacker_1",
+    operation: "create",
+    path: `events/${"x".repeat(140)}`,
+    payload: { bio: "A".repeat(5000) },
+    expected: "PERMISSION_DENIED",
+  },
+];
+
+export function verifyRulesContainAllBlueprintCollections() {
+  const blueprint = JSON.parse(
+    fs.readFileSync(path.resolve(process.cwd(), "firebase-blueprint.json"), "utf8")
+  );
+  const rulesText = fs.readFileSync(path.resolve(process.cwd(), "firestore.rules"), "utf8");
+  const expectedMatches = [
+    "match /users/{uid}",
+    "match /users/{uid}/private/{docId}",
+    "match /users/{uid}/blocked/{targetUid}",
+    "match /usernames/{usernameKey}",
+    "match /events/{eventId}",
+    "match /eventParticipants/{participantId}",
+    "match /eventLikes/{likeId}",
+    "match /userLikes/{likeId}",
+    "match /matches/{matchId}",
+    "match /groups/{groupId}",
+    "match /groupMembers/{memberId}",
+    "match /chats/{chatId}",
+    "match /messages/{messageId}",
+    "match /soloPosts/{soloId}",
+    "match /soloInterests/{interestId}",
+    "match /reports/{reportId}",
+    "match /interests/{interestId}",
+  ];
+  const missing = expectedMatches.filter((m) => !rulesText.includes(m));
+  if (missing.length) {
+    throw new Error(`Missing match blocks in firestore.rules: ${missing.join(", ")}`);
+  }
+  return {
+    blueprintCollections: Object.keys(blueprint.firestore || {}).length,
+    dirtyDozenCases: DIRTY_DOZEN_CASES.length,
+    status: "matched",
+  };
+}

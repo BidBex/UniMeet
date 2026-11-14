@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Manage your UniMeet student profile, hobbies, interests, settings, and blocked users.">
+  <title>Profile — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="profile">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-layout" id="app-shell">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
+    <main id="main-content" class="app-main">
+      <div class="page-header">
+        <div>
+          <h1>Your Profile &amp; Settings</h1>
+          <p class="muted-small">Customize your bio, university, interests, and safety preferences.</p>
+        </div>
+        <button type="button" class="btn btn-secondary" id="profile-logout-btn">Sign out</button>
+      </div>
+
+      <div class="segmented-tabs" role="tablist">
+        <button type="button" class="tab-btn is-active" data-profile-tab="overview">Overview &amp; Edit</button>
+        <button type="button" class="tab-btn" data-profile-tab="interests">Interests</button>
+        <button type="button" class="tab-btn" data-profile-tab="blocked">Safety &amp; Blocked Users</button>
+      </div>
+
+      <div id="profile-content"></div>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/profile.js"></script>
+</body>
+</html>

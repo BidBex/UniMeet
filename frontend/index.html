@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111412">
+  <meta name="description" content="UniMeet — Find your people. Make plans. Go together. Discover student events, meet people with shared interests, and join Going Solo groups.">
+  <meta property="og:title" content="UniMeet — Find your people. Make plans. Go together.">
+  <meta property="og:description" content="Want to go to a concert, grab coffee, watch a movie, or explore the city? Find students who want to do the same.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>UniMeet — Find your people. Make plans. Go together.</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="landing">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="landing-top-bar container">
+      <a href="index.html" class="brand-wordmark">
+        <img src="assets/icons/unimeet-logo.svg" alt="" width="28" height="28">
+        <span>UniMeet</span>
+      </a>
+      <nav class="landing-nav-links" aria-label="Main navigation">
+        <a href="events.html">Explore Events</a>
+        <a href="discover.html?tab=people">Discover People</a>
+        <a href="groups.html?tab=solo">Going Solo</a>
+        <a href="#how-it-works">How It Works</a>
+      </nav>
+      <div class="landing-nav-actions">
+        <a href="login.html" class="landing-nav-login">Log In</a>
+        <a href="register.html" class="btn btn-primary landing-nav-cta">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="landing-hero">
+      <div class="container">
+        <div class="landing-hero-grid">
+          <div class="landing-hero-copy">
+            <p class="landing-hero-kicker">Student Events &amp; Plans in Your City</p>
+            <h1 class="landing-hero-title">Find your people. Make plans. Go together.</h1>
+            <p class="landing-hero-subtitle">
+              Want to go to a concert, grab coffee, watch a movie, or explore the city? Find students who want to do the same.
+            </p>
+            <div class="landing-hero-actions">
+              <a href="events.html" class="btn btn-primary">Explore events</a>
+              <a href="discover.html?tab=people" class="btn btn-secondary">Find people to go with</a>
+            </div>
+            <p class="landing-hero-note">Going alone? You don't have to.</p>
+          </div>
+          <div class="landing-hero-media">
+            <img
+              src="assets/images/hero-concert.jpg"
+              alt="University students walking together into an evening outdoor concert"
+              referrerpolicy="no-referrer"
+            >
+            <div class="landing-hero-media-scrim" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What Do You Want To Do? -->
+    <section class="landing-section landing-section-alt" id="explore-options">
+      <div class="container">
+        <div class="landing-section-head">
+          <div class="landing-section-intro">
+            <h2>What do you want to do?</h2>
+            <p>Jump straight into events around you, meet new people, or find a small group for tonight.</p>
+          </div>
+        </div>
+
+        <div class="intent-grid">
+          <article class="intent-card">
+            <div class="intent-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h3>Find Events</h3>
+            <p>Discover concerts, festivals, cinema nights, parties, and activities happening around you.</p>
+            <a href="events.html" class="intent-link">
+              <span>Explore events</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </article>
+
+          <article class="intent-card">
+            <div class="intent-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <h3>Find People</h3>
+            <p>Meet students who share your interests and want to do the same things.</p>
+            <a href="discover.html?tab=people" class="intent-link">
+              <span>Discover people</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </article>
+
+          <article class="intent-card intent-card-purple">
+            <div class="intent-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>Going Solo</h3>
+            <p>Have plans but nobody to go with? Find others attending the same event.</p>
+            <a href="groups.html?tab=solo" class="intent-link">
+              <span>Find your group</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </article>
+
+          <article class="intent-card">
+            <div class="intent-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h3>University Community</h3>
+            <p>Connect with students from your university, faculty, or city.</p>
+            <a href="groups.html?tab=community" class="intent-link">
+              <span>Explore community</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Things Happening Near You (Live Firestore Events Preview) -->
+    <section class="landing-section" id="upcoming-events">
+      <div class="container">
+        <div class="landing-section-head">
+          <div class="landing-section-intro">
+            <h2>Things happening near you</h2>
+            <p>Find something interesting to do. Your next great experience might be just around the corner.</p>
+          </div>
+          <a href="events.html" class="btn btn-secondary btn-sm">See all events</a>
+        </div>
+
+        <div id="landing-events-preview" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- How Finding People Works -->
+    <section class="landing-section landing-section-alt" id="how-it-works">
+      <div class="container">
+        <div class="landing-section-head">
+          <div class="landing-section-intro">
+            <h2>Don't have anyone to go with? That's what we're here for.</h2>
+            <p>Going out shouldn't depend on whether your usual friends happen to be free that night.</p>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-card-top">
+              <span class="step-index">01.</span>
+              <svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3>Find something you like</h3>
+            <p>Browse concerts, festivals, cinema nights, and other activities.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-card-top">
+              <span class="step-index">02.</span>
+              <svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h3>Find people with similar interests</h3>
+            <p>Discover students attending the same event or looking for the same experience.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-card-top">
+              <span class="step-index">03.</span>
+              <svg class="step-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3>Make plans together</h3>
+            <p>Connect through chat and decide where to meet.</p>
+          </article>
+        </div>
+
+        <p class="steps-context-note">
+          UniMeet helps suggest good matches based on shared interests, your university, your city, and the kinds of events you enjoy.
+        </p>
+      </div>
+    </section>
+
+    <!-- Going Solo Spotlight -->
+    <section class="landing-section" id="going-solo">
+      <div class="container">
+        <div class="solo-split">
+          <div class="solo-visual">
+            <img
+              src="assets/images/event-boardgames.jpg"
+              alt="Students playing board games together over coffee at a campus cafe"
+              referrerpolicy="no-referrer"
+            >
+          </div>
+          <div class="solo-copy">
+            <p class="solo-kicker">Going Solo &amp; Small Groups</p>
+            <h2>Going solo? Find your people.</h2>
+            <p>
+              Sometimes you really want to attend something, but nobody is available. See who else is going alone and join a group.
+            </p>
+            <ul class="solo-points">
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>See other students attending the same event</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Join existing groups (often 4–8 people)</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Post a Going Solo note so others heading there can message you</span>
+              </li>
+            </ul>
+            <div>
+              <a href="groups.html?tab=solo" class="btn btn-purple-outline">Find people to go with</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- University Community Section -->
+    <section class="landing-section landing-section-alt" id="community">
+      <div class="container">
+        <div class="community-panel">
+          <div>
+            <h2>Your university. Your city. Your people.</h2>
+            <p>
+              Meet students from your university or discover people from other campuses and universities nearby.
+            </p>
+            <p class="muted-small" style="margin-bottom: 1.25rem;">
+              Adding your university is completely optional — you can explore plans across your whole city anytime.
+            </p>
+            <a href="groups.html?tab=community" class="btn btn-secondary">Explore community</a>
+          </div>
+          <div class="community-campuses" aria-label="Supported campus communities">
+            <div class="campus-row">
+              <strong>Politehnica University of Timisoara</strong>
+              <span>Concerts, board game nights, and tech &amp; campus meetups</span>
+            </div>
+            <div class="campus-row">
+              <strong>West University of Timisoara (UVT)</strong>
+              <span>Indie cinema screenings, arts festivals, and coffee walks</span>
+            </div>
+            <div class="campus-row">
+              <strong>Victor Babes University &amp; Nearby Campuses</strong>
+              <span>Open to students, Erasmus visitors, and young adults in the city</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Safety Section -->
+    <section class="landing-section" id="safety">
+      <div class="container">
+        <div class="landing-section-head">
+          <div class="landing-section-intro">
+            <h2>Meet new people with confidence.</h2>
+            <p>Simple controls built directly into every profile, group, and chat.</p>
+          </div>
+        </div>
+
+        <div class="safety-grid">
+          <article class="safety-card">
+            <div class="safety-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            </div>
+            <h3>Block users anytime</h3>
+            <p>Block anyone you do not want to interact with and they disappear from your feeds and chats immediately.</p>
+          </article>
+
+          <article class="safety-card">
+            <div class="safety-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            </div>
+            <h3>Report bad behavior</h3>
+            <p>Report inappropriate profiles, groups, or messages in a couple of taps for moderation review.</p>
+          </article>
+
+          <article class="safety-card">
+            <div class="safety-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3>Meet in public places</h3>
+            <p>Every chat reminds you to pick busy, well-lit campus spots or city venues for first meetups.</p>
+          </article>
+
+          <article class="safety-card">
+            <div class="safety-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Control your interactions</h3>
+            <p>You only chat with people you match with, groups you join, or Going Solo plans you reply to.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final Call To Action -->
+    <section class="landing-section">
+      <div class="container">
+        <div class="final-cta-box">
+          <div class="final-cta-copy">
+            <h2>Your next plan starts here.</h2>
+            <p>Find an event, meet new people, and make university life more interesting.</p>
+          </div>
+          <div class="final-cta-actions">
+            <a href="events.html" class="btn btn-primary">Explore events</a>
+            <a href="register.html" class="btn btn-secondary" id="landing-final-account-cta">Create free account</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/landing.js"></script>
+</body>
+</html>

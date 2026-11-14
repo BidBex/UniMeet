@@ -1,0 +1,199 @@
+name: Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install app dependencies
+        run: |
+          npm install --ignore-scripts --legacy-peer-deps
+          npm install --save-dev --ignore-scripts --legacy-peer-deps @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+
+      - name: Build UniMeet web bundle with Firebase SDK
+        run: npm run build
+
+      - name: Prepare Android web app bundle
+        run: |
+          rm -rf android-web
+          mkdir -p android-web
+          cp -R dist/. android-web/
+          find android-web -name ".*" -type f -delete
+
+      - name: Initialize and sync Capacitor Android project
+        run: |
+          if [ ! -d android ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+
+      - name: Harden AndroidManifest and prepare release signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
+
+          # 1. Harden AndroidManifest.xml (no backup, HTTPS only, never debuggable)
+          manifest_path = Path("android/app/src/main/AndroidManifest.xml")
+          manifest = manifest_path.read_text(encoding="utf-8")
+          manifest = re.sub(r'\s*android:debuggable="[^"]*"', "", manifest)
+          manifest = re.sub(r'\s*android:allowBackup="[^"]*"', "", manifest)
+          manifest = re.sub(r'\s*android:usesCleartextTraffic="[^"]*"', "", manifest)
+          manifest = manifest.replace(
+              "<application",
+              '<application android:allowBackup="false" android:usesCleartextTraffic="false"',
+              1,
+          )
+          manifest_path.write_text(manifest, encoding="utf-8")
+
+          # 2. Prepare release keystore (use GitHub Secret if set, else generate a non-debug release key)
+          keystore_path = Path("android/app/unimeet-release.jks").resolve()
+          ks_b64 = os.environ.get("ANDROID_KEYSTORE_BASE64", "").strip()
+          ks_pass = os.environ.get("ANDROID_KEYSTORE_PASSWORD", "").strip()
+          key_alias = os.environ.get("ANDROID_KEY_ALIAS", "").strip()
+          key_pass = os.environ.get("ANDROID_KEY_PASSWORD", "").strip()
+
+          if ks_b64 and ks_pass and key_alias:
+              keystore_path.write_bytes(base64.b64decode(ks_b64))
+              if not key_pass:
+                  key_pass = ks_pass
+              print("Using persistent release keystore from GitHub Secrets.")
+          else:
+              ks_pass = "unimeet-release-store-2026"
+              key_alias = "unimeet-release"
+              key_pass = ks_pass
+              subprocess.run(
+                  [
+                      "keytool",
+                      "-genkeypair",
+                      "-v",
+                      "-keystore",
+                      str(keystore_path),
+                      "-alias",
+                      key_alias,
+                      "-keyalg",
+                      "RSA",
+                      "-keysize",
+                      "2048",
+                      "-validity",
+                      "10000",
+                      "-storepass",
+                      ks_pass,
+                      "-keypass",
+                      key_pass,
+                      "-dname",
+                      "CN=UniMeet, OU=Mobile, O=UniMeet, L=Timisoara, C=RO",
+                  ],
+                  check=True,
+              )
+              print("Generated non-debug RSA release keystore.")
+
+          # Export resolved values via GITHUB_ENV so build.gradle reads them without hardcoding secrets
+          env_file = os.environ.get("GITHUB_ENV")
+          if env_file:
+              with open(env_file, "a", encoding="utf-8") as fh:
+                  fh.write(f"UNIMEET_KS_PATH={keystore_path.as_posix()}\n")
+                  fh.write(f"UNIMEET_KS_PASS={ks_pass}\n")
+                  fh.write(f"UNIMEET_KEY_ALIAS={key_alias}\n")
+                  fh.write(f"UNIMEET_KEY_PASS={key_pass}\n")
+
+          # 3. Configure signingConfigs.release in android/app/build.gradle
+          gradle_path = Path("android/app/build.gradle")
+          gradle_text = gradle_path.read_text(encoding="utf-8")
+
+          signing_block = """
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file(System.getenv("UNIMEET_KS_PATH"))
+                      storePassword System.getenv("UNIMEET_KS_PASS")
+                      keyAlias System.getenv("UNIMEET_KEY_ALIAS")
+                      keyPassword System.getenv("UNIMEET_KEY_PASS")
+                      enableV1Signing true
+                      enableV2Signing true
+                      enableV3Signing true
+                  }
+              }
+              buildTypes {
+                  release {
+                      debuggable false
+                      jniDebuggable false
+                      signingConfig signingConfigs.release
+                  }
+              }
+          }
+          """
+          if "signingConfigs.release" not in gradle_text:
+              gradle_path.write_text(gradle_text + "\n" + signing_block, encoding="utf-8")
+          PY
+
+      - name: Build signed release APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      - name: Verify and package release APK
+        run: |
+          mkdir -p release-output
+          APK_SRC=$(find android/app/build/outputs/apk/release -name "*.apk" ! -name "*unsigned*" | head -n 1)
+          if [ -z "$APK_SRC" ]; then
+            echo "::error::Signed release APK was not produced."
+            exit 1
+          fi
+          cp "$APK_SRC" release-output/UniMeet-release.apk
+          BUILD_TOOLS=$(ls -d "${ANDROID_HOME:-/usr/local/lib/android/sdk}/build-tools/"* 2>/dev/null | sort -V | tail -n 1 || true)
+          if [ -n "$BUILD_TOOLS" ] && [ -x "$BUILD_TOOLS/apksigner" ]; then
+            "$BUILD_TOOLS/apksigner" verify --verbose release-output/UniMeet-release.apk
+          fi
+          (cd release-output && sha256sum UniMeet-release.apk > UniMeet-release.apk.sha256)
+          (cd release-output && python3 -m zipfile -c UniMeet-release-apk.zip UniMeet-release.apk UniMeet-release.apk.sha256)
+          rm -f android/app/unimeet-release.jks
+
+      - name: Upload signed APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unimeet-android-apk
+          path: |
+            release-output/UniMeet-release.apk
+            release-output/UniMeet-release.apk.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-output/UniMeet-release.apk
+            release-output/UniMeet-release-apk.zip
+            release-output/UniMeet-release.apk.sha256
+          generate_release_notes: true

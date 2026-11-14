@@ -1,0 +1,915 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public and community student profile stored in Firestore without PII or credentials.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50,
+          "pattern": "^[a-zA-Z0-9_.-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "firstName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "age": {
+          "type": "integer"
+        },
+        "profilePicture": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "university": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "faculty": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "studyProgram": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "studyYear": {
+          "type": "integer"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "bio": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "interests": {
+          "type": "array"
+        },
+        "hobbies": {
+          "type": "array"
+        },
+        "likedCategories": {
+          "type": "array"
+        },
+        "preferences": {
+          "type": "object"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "isVerified": {
+          "type": "boolean"
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "demoKey": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "username",
+        "displayName",
+        "firstName",
+        "lastName",
+        "interests",
+        "hobbies",
+        "likedCategories",
+        "isActive",
+        "isVerified",
+        "isSample",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Strictly isolated PII document for a user, accessible only to the owner.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 255
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "UsernameReservation": {
+      "title": "UsernameReservation",
+      "description": "Maps normalized lowercase usernames to UIDs to enforce uniqueness.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50,
+          "pattern": "^[a-zA-Z0-9_.-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "username", "createdAt"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Campus or city event outing created by a user or seeded as sample data.",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "description": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 3000
+        },
+        "location": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200
+        },
+        "city": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "university": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "date": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "organizerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "organizerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "organizerUniversity": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "maximumParticipants": {
+          "type": "integer"
+        },
+        "participantCount": {
+          "type": "integer"
+        },
+        "likeCount": {
+          "type": "integer"
+        },
+        "imageUrl": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "eventId",
+        "title",
+        "description",
+        "location",
+        "city",
+        "date",
+        "startTime",
+        "category",
+        "organizerId",
+        "organizerName",
+        "participantCount",
+        "likeCount",
+        "isActive",
+        "isSample",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EventParticipant": {
+      "title": "EventParticipant",
+      "description": "Tracks a user's participation in a specific event.",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["going"]
+        }
+      },
+      "required": ["eventId", "userId", "joinedAt", "status"]
+    },
+    "EventLike": {
+      "title": "EventLike",
+      "description": "Tracks a user's like on an event.",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["eventId", "userId", "createdAt"]
+    },
+    "UserLike": {
+      "title": "UserLike",
+      "description": "Directional like from senderId to receiverId for a given eventId.",
+      "type": "object",
+      "properties": {
+        "senderId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "receiverId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["senderId", "receiverId", "eventId", "createdAt"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "Mutual event match between two users with explainable compatibility score.",
+      "type": "object",
+      "properties": {
+        "matchId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userIds": {
+          "type": "array"
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "compatibilityScore": {
+          "type": "integer"
+        },
+        "compatibilityDetails": {
+          "type": "object"
+        },
+        "conversationId": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "unmatched"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "matchId",
+        "userIds",
+        "eventId",
+        "eventTitle",
+        "compatibilityScore",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Group": {
+      "title": "Group",
+      "description": "Student group linked optionally to an event.",
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 2000
+        },
+        "creatorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "eventTitle": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "maxMembers": {
+          "type": "integer"
+        },
+        "memberCount": {
+          "type": "integer"
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "university": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "interestsSummary": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "conversationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "groupId",
+        "name",
+        "description",
+        "creatorId",
+        "maxMembers",
+        "memberCount",
+        "isPublic",
+        "conversationId",
+        "isSample",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "GroupMember": {
+      "title": "GroupMember",
+      "description": "Membership document for a group (admin/member, active/pending).",
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "groupCreatorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "member"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "pending"]
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["groupId", "userId", "role", "status", "joinedAt"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "Conversation thread between matched users, solo companions, event attendees, or a group.",
+      "type": "object",
+      "properties": {
+        "chatId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "participants": {
+          "type": "array"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["direct", "group", "event", "solo"]
+        },
+        "matchId": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "groupId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "eventId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "lastMessage": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "lastMessageAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastMessageSenderId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["chatId", "participants", "type", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Individual real-time message inside a chat subcollection.",
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "chatId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "readBy": {
+          "type": "array"
+        },
+        "isUnsent": {
+          "type": "boolean"
+        },
+        "hiddenFor": {
+          "type": "array"
+        }
+      },
+      "required": ["messageId", "chatId", "senderId", "content", "timestamp", "readBy", "isUnsent", "hiddenFor"]
+    },
+    "SoloPost": {
+      "title": "SoloPost",
+      "description": "Temporary Going Solo announcement linked to an event.",
+      "type": "object",
+      "properties": {
+        "soloId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "eventTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "eventCity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "eventStartTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive"]
+        },
+        "interestCount": {
+          "type": "integer"
+        },
+        "isSample": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "soloId",
+        "userId",
+        "eventId",
+        "eventTitle",
+        "eventCity",
+        "eventStartTime",
+        "message",
+        "status",
+        "interestCount",
+        "isSample",
+        "createdAt",
+        "expiresAt",
+        "updatedAt"
+      ]
+    },
+    "SoloInterest": {
+      "title": "SoloInterest",
+      "description": "Records a student's interest in teaming up with a Going Solo poster.",
+      "type": "object",
+      "properties": {
+        "soloId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "soloOwnerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["soloId", "userId", "createdAt"]
+    },
+    "BlockedUser": {
+      "title": "BlockedUser",
+      "description": "Private block entry owned by the blocker user.",
+      "type": "object",
+      "properties": {
+        "blockerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "blockedId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["blockerId", "blockedId", "createdAt"]
+    },
+    "SafetyReport": {
+      "title": "SafetyReport",
+      "description": "User moderation report submitted for review.",
+      "type": "object",
+      "properties": {
+        "reporterId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "reportedUserId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "reason": {
+          "type": "string",
+          "enum": ["harassment", "spam", "inappropriate_content", "fake_profile", "safety_concern", "other"]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "reviewed", "resolved", "dismissed"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["reporterId", "reportedUserId", "reason", "status", "createdAt"]
+    },
+    "InterestCatalogItem": {
+      "title": "InterestCatalogItem",
+      "description": "Reference interest option for profile matching.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        }
+      },
+      "required": ["id", "name", "category"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Public student profiles indexed by Firebase UID (no PII)."
+    },
+    "/users/{uid}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Owner-only PII document storing user email."
+    },
+    "/users/{uid}/blocked/{targetUid}": {
+      "schema": { "$ref": "#/entities/BlockedUser" },
+      "description": "Owner-only list of blocked user UIDs."
+    },
+    "/usernames/{usernameKey}": {
+      "schema": { "$ref": "#/entities/UsernameReservation" },
+      "description": "Unique lowercase username reservation mapping to UID."
+    },
+    "/events/{eventId}": {
+      "schema": { "$ref": "#/entities/Event" },
+      "description": "Events catalog including real user-created outings and labeled sample events."
+    },
+    "/eventParticipants/{participantId}": {
+      "schema": { "$ref": "#/entities/EventParticipant" },
+      "description": "Event attendance records keyed as {eventId}__{userId}."
+    },
+    "/eventLikes/{likeId}": {
+      "schema": { "$ref": "#/entities/EventLike" },
+      "description": "Per-user event likes keyed as {eventId}__{userId}."
+    },
+    "/userLikes/{likeId}": {
+      "schema": { "$ref": "#/entities/UserLike" },
+      "description": "Directional user likes for an event keyed as {senderId}__{receiverId}__{eventId}."
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/Match" },
+      "description": "Mutual matches keyed deterministically as {minUid}__{maxUid}__{eventId}."
+    },
+    "/groups/{groupId}": {
+      "schema": { "$ref": "#/entities/Group" },
+      "description": "Public and private student groups."
+    },
+    "/groupMembers/{memberId}": {
+      "schema": { "$ref": "#/entities/GroupMember" },
+      "description": "Group membership records keyed as {groupId}__{userId}."
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/Chat" },
+      "description": "Conversation metadata accessible only to listed participants."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Real-time messages inside a conversation."
+    },
+    "/soloPosts/{soloId}": {
+      "schema": { "$ref": "#/entities/SoloPost" },
+      "description": "Active Going Solo event companion posts."
+    },
+    "/soloInterests/{interestId}": {
+      "schema": { "$ref": "#/entities/SoloInterest" },
+      "description": "Teaming-up interest records keyed as {soloId}__{userId}."
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/SafetyReport" },
+      "description": "Moderation reports submitted by users."
+    },
+    "/interests/{interestId}": {
+      "schema": { "$ref": "#/entities/InterestCatalogItem" },
+      "description": "Reference interests catalog."
+    }
+  }
+}

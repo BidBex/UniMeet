@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Log in to your UniMeet student account.">
+  <title>Log In — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="login">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="auth-shell">
+    <header class="auth-mobile-bar">
+      <a href="index.html" class="brand-wordmark">
+        <img src="assets/icons/unimeet-logo.svg" alt="" width="28" height="28">
+        <span>UniMeet</span>
+      </a>
+    </header>
+
+    <aside class="auth-aside">
+      <a href="index.html" class="brand-wordmark">
+        <img src="assets/icons/unimeet-logo.svg" alt="" width="30" height="30">
+        <span>UniMeet</span>
+      </a>
+      <div>
+        <h1>Welcome back to your campus social circle.</h1>
+        <p>Check your mutual event matches, respond to Going Solo invites, and coordinate tonight's plans in real-time chat.</p>
+      </div>
+      <p class="muted-small" style="color: rgba(255,255,255,0.7);">UniMeet · UniHack2026</p>
+    </aside>
+
+    <main id="main-content" class="auth-panel">
+      <div class="auth-card">
+        <h1 id="auth-heading" style="font-size: 1.75rem;">Sign in to UniMeet</h1>
+        <p id="auth-subheading">Use your registered email address and password.</p>
+
+        <div id="auth-feedback" class="form-alert" role="status" aria-live="polite" hidden style="margin-bottom: 1rem;"></div>
+
+        <form id="login-form" class="stack-form" novalidate>
+          <div class="field">
+            <label for="login-identifier">Email address</label>
+            <input id="login-identifier" name="identifier" type="email" autocomplete="email" required placeholder="student@university.edu">
+            <span class="field-error" id="err-identifier"></span>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="login-password">Password</label>
+              <a href="reset-password.html" class="link-btn" id="forgot-password-link">Forgot password?</a>
+            </div>
+            <div class="password-wrap">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+              <button type="button" class="password-toggle" data-toggle-pw="login-password" aria-label="Show password">Show</button>
+            </div>
+            <span class="field-error" id="err-password"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn">Sign in</button>
+        </form>
+
+        <div class="demo-box" aria-label="Demo student account">
+          <div class="field-label-row">
+            <strong>Demo Student Account</strong>
+            <span class="muted-small">Instant Firebase preview</span>
+          </div>
+          <p class="muted-small" style="margin: 0;">
+            Email: <code id="demo-email-text">demo@unimeet.app</code><br>
+            Password: <code id="demo-password-text">DemoUser123!</code>
+          </p>
+          <div class="demo-actions">
+            <button type="button" class="btn btn-coral btn-sm" id="demo-login-btn">Sign in as Demo Student</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="demo-fill-btn">Fill credentials</button>
+          </div>
+        </div>
+
+        <p class="auth-card-footer">
+          New to UniMeet? <a href="register.html">Create an account</a> · <a href="index.html">Back home</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

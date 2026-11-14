@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Chat in real time with matched event companions and groups on UniMeet.">
+  <title>Messages — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="messages">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-layout" id="app-shell">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
+    <main id="main-content" class="app-main">
+      <div class="page-header">
+        <div>
+          <h1>Messages</h1>
+          <p class="muted-small">Real-time chat with your matches, groups, and solo connections.</p>
+        </div>
+        <span id="ws-status-label" class="muted-small" aria-live="polite">Sync ready</span>
+      </div>
+
+      <div class="chat-shell" id="chat-shell">
+        <div class="chat-list" id="conversation-list" aria-label="Conversations"></div>
+
+        <section class="chat-pane" id="chat-pane" aria-label="Active conversation">
+          <div class="chat-pane-header" id="chat-pane-header">
+            <strong>Select a conversation</strong>
+          </div>
+          <div class="chat-history" id="chat-history">
+            <div class="empty-state">
+              <p>Choose a conversation on the left to view chat history and send messages.</p>
+            </div>
+          </div>
+          <form class="chat-compose" id="chat-compose-form" hidden>
+            <input id="chat-message-input" type="text" maxlength="2000" required placeholder="Write a message..." aria-label="Message text">
+            <button type="submit" class="btn btn-primary" id="chat-send-btn">Send</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/messages.js"></script>
+</body>
+</html>

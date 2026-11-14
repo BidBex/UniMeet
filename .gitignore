@@ -1,0 +1,16 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+backend/.venv/
+backend/.jwt_secret
+backend/**/__pycache__/
+.pytest_cache/
+*.db-journal
+*.db-wal
+android-web/
+android/

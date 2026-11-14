@@ -1,0 +1,193 @@
+/* UniMeet Authentication Pages Stylesheet */
+
+.auth-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  background: var(--color-bg-light);
+}
+
+.auth-aside {
+  background-color: var(--color-bg-dark);
+  background-image:
+    linear-gradient(to right, rgba(246, 245, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(246, 245, 241, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: #f6f5f1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-aside h1,
+.auth-aside h2,
+.auth-aside p {
+  color: #f6f5f1;
+}
+
+.auth-aside p {
+  opacity: 0.84;
+}
+
+.auth-aside .brand-wordmark {
+  color: #f6f5f1;
+}
+
+.auth-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 470px;
+  min-width: 0;
+  box-sizing: border-box;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+}
+
+.auth-card .field {
+  min-width: 0;
+  width: 100%;
+}
+
+.auth-card-footer {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.auth-card-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+}
+
+.password-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.password-wrap input {
+  width: 100%;
+  min-width: 0;
+  padding-right: 4.8rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  min-height: 36px;
+  padding: 0 0.72rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pw-rules {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.pw-rules li.is-met {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.demo-box {
+  margin-top: 1.1rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius-md);
+  background: var(--color-secondary-tint);
+  border: 1px solid var(--color-secondary-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  overflow-wrap: anywhere;
+}
+
+.demo-box code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.demo-actions .btn {
+  flex: 1 1 140px;
+  white-space: normal;
+  text-align: center;
+}
+
+.auth-mobile-bar {
+  display: none;
+}
+
+.auth-card .field-error:empty {
+  display: none;
+}
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+}
+
+.field-label-row .link-btn {
+  white-space: nowrap;
+}
+
+.link-btn {
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link-btn:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

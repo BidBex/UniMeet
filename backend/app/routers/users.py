@@ -1,0 +1,335 @@
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
+
+from app.config import get_settings
+from app.database import get_db
+from app.models.interest import Interest, UserInterest
+from app.models.user import User, UserHobby
+from app.schemas.auth import (
+    CompatibilityOut,
+    InterestOut,
+    UserHobbiesResponse,
+    UserHobbiesUpdateRequest,
+    UserInterestsResponse,
+    UserInterestsUpdateRequest,
+    UserPrivateOut,
+    UserPublicOut,
+    UserUpdateRequest,
+)
+from app.security.auth import get_current_user, verify_password
+from app.seed import DEMO_PASSWORD, DEMO_USERS_DATA, SUGGESTED_HOBBIES
+from app.services.compatibility import compute_compatibility
+from app.services.serializers import (
+    get_blocked_user_ids,
+    get_user_hobbies,
+    get_user_interests,
+    is_blocked_between,
+    user_to_private,
+    user_to_public,
+)
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+def _replace_user_hobbies(db: Session, user_id: int, hobbies: List[str]) -> None:
+    db.query(UserHobby).filter(UserHobby.user_id == user_id).delete()
+    for hobby_name in hobbies:
+        db.add(UserHobby(user_id=user_id, name=hobby_name))
+
+
+def _resolve_demo_template(current_user: User) -> Optional[dict]:
+    if current_user.demo_key:
+        for item in DEMO_USERS_DATA:
+            if item["username"].lower() == current_user.demo_key.strip().lower():
+                return item
+
+    email_lower = (current_user.email or "").strip().lower()
+    username_lower = (current_user.username or "").strip().lower()
+
+    for item in DEMO_USERS_DATA:
+        if item["email"].lower() == email_lower or item["username"].lower() == username_lower:
+            return item
+
+    # Also handle edited demo accounts created before demo_key was added
+    if 1 <= current_user.id <= len(DEMO_USERS_DATA) and verify_password(
+        DEMO_PASSWORD, current_user.hashed_password
+    ):
+        return DEMO_USERS_DATA[current_user.id - 1]
+
+    return None
+
+
+@router.get("/me", response_model=UserPrivateOut, summary="Get own profile")
+def get_my_profile(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return user_to_private(db, current_user)
+
+
+@router.post("/me/reset-demo", response_model=UserPrivateOut, summary="Reset demo account to defaults")
+def reset_demo_account(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if get_settings().ENVIRONMENT.lower() == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Demo account reset is disabled in production.",
+        )
+
+    template = _resolve_demo_template(current_user)
+    if not template:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Reset to defaults is only available for demo accounts.",
+        )
+
+    target_email = template["email"].strip().lower()
+    target_username = template["username"].strip()
+
+    email_conflict = (
+        db.query(User)
+        .filter(User.email.ilike(target_email), User.id != current_user.id)
+        .first()
+    )
+    if email_conflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Default demo email is currently in use by another account.",
+        )
+
+    username_conflict = (
+        db.query(User)
+        .filter(User.username.ilike(target_username), User.id != current_user.id)
+        .first()
+    )
+    if username_conflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Default demo username is currently in use by another account.",
+        )
+
+    current_user.username = target_username
+    current_user.email = target_email
+    current_user.first_name = template["first_name"]
+    current_user.last_name = template["last_name"]
+    current_user.age = template["age"]
+    current_user.university = template["university"]
+    current_user.city = template["city"]
+    current_user.bio = template["bio"]
+    current_user.profile_picture = None
+    current_user.is_active = True
+    current_user.is_moderator = template.get("is_moderator", False)
+    current_user.demo_key = target_username
+    db.add(current_user)
+
+    db.query(UserInterest).filter(UserInterest.user_id == current_user.id).delete()
+    default_interests = (
+        db.query(Interest).filter(Interest.name.in_(template["interests"])).all()
+    )
+    for interest in default_interests:
+        db.add(UserInterest(user_id=current_user.id, interest_id=interest.id))
+
+    _replace_user_hobbies(db, current_user.id, template.get("hobbies", []))
+
+    db.commit()
+    db.refresh(current_user)
+    return user_to_private(db, current_user)
+
+
+@router.put("/me", response_model=UserPrivateOut, summary="Update own profile")
+def update_my_profile(
+    payload: UserUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if not current_user.demo_key:
+        matched_demo = _resolve_demo_template(current_user)
+        if matched_demo:
+            current_user.demo_key = matched_demo["username"]
+
+    updates = payload.model_dump(exclude_unset=True)
+
+    if "email" in updates and updates["email"] is not None:
+        normalized_email = updates["email"].strip().lower()
+        existing_email = (
+            db.query(User)
+            .filter(User.email.ilike(normalized_email), User.id != current_user.id)
+            .first()
+        )
+        if existing_email:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="An account with this email already exists.",
+            )
+        updates["email"] = normalized_email
+
+    if "username" in updates and updates["username"] is not None:
+        cleaned_username = updates["username"].strip()
+        existing_username = (
+            db.query(User)
+            .filter(User.username.ilike(cleaned_username), User.id != current_user.id)
+            .first()
+        )
+        if existing_username:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="This username is already taken.",
+            )
+        updates["username"] = cleaned_username
+
+    hobbies_update = updates.pop("hobbies", None)
+
+    for field, value in updates.items():
+        if isinstance(value, str):
+            cleaned = value.strip()
+            if field in ("first_name", "last_name", "username", "email"):
+                if not cleaned:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"{field.replace('_', ' ').title()} cannot be blank.",
+                    )
+                value = cleaned
+            else:
+                value = cleaned or None
+        setattr(current_user, field, value)
+
+    if hobbies_update is not None:
+        _replace_user_hobbies(db, current_user.id, hobbies_update)
+
+    db.add(current_user)
+    db.commit()
+    db.refresh(current_user)
+    return user_to_private(db, current_user)
+
+
+@router.get("/interests", response_model=UserInterestsResponse, summary="Get user and available interests")
+def get_my_interests(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    selected = get_user_interests(db, current_user)
+    available = [
+        InterestOut.model_validate(item)
+        for item in db.query(Interest).order_by(Interest.category.asc(), Interest.name.asc()).all()
+    ]
+    return UserInterestsResponse(selected_interests=selected, available_interests=available)
+
+
+@router.put("/interests", response_model=UserInterestsResponse, summary="Replace user selected interests")
+def update_my_interests(
+    payload: UserInterestsUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    unique_ids = list(dict.fromkeys(payload.interest_ids))
+    if unique_ids:
+        existing = db.query(Interest).filter(Interest.id.in_(unique_ids)).all()
+        if len(existing) != len(unique_ids):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="One or more selected interest IDs do not exist.",
+            )
+
+    db.query(UserInterest).filter(UserInterest.user_id == current_user.id).delete()
+    for interest_id in unique_ids:
+        db.add(UserInterest(user_id=current_user.id, interest_id=interest_id))
+    db.commit()
+
+    return get_my_interests(current_user=current_user, db=db)
+
+
+@router.get("/hobbies", response_model=UserHobbiesResponse, summary="Get user and suggested hobbies")
+def get_my_hobbies(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    selected = get_user_hobbies(db, current_user)
+    return UserHobbiesResponse(
+        selected_hobbies=selected,
+        suggested_hobbies=list(SUGGESTED_HOBBIES),
+    )
+
+
+@router.put("/hobbies", response_model=UserHobbiesResponse, summary="Replace user selected hobbies")
+def update_my_hobbies(
+    payload: UserHobbiesUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    _replace_user_hobbies(db, current_user.id, payload.hobbies)
+    db.commit()
+    return get_my_hobbies(current_user=current_user, db=db)
+
+
+@router.get("/discover", response_model=List[UserPublicOut], summary="Discover students with compatibility")
+def discover_users(
+    university: Optional[str] = Query(default=None),
+    city: Optional[str] = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=50),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    blocked_ids = get_blocked_user_ids(db, current_user.id)
+    excluded_ids = blocked_ids | {current_user.id}
+
+    query = db.query(User).filter(User.is_active.is_(True), ~User.id.in_(excluded_ids))
+    if university:
+        query = query.filter(User.university.ilike(f"%{university.strip()}%"))
+    if city:
+        query = query.filter(User.city.ilike(f"%{city.strip()}%"))
+
+    candidates = query.order_by(User.created_at.desc()).limit(limit * 2).all()
+    scored = []
+    for candidate in candidates:
+        compat = compute_compatibility(db, current_user, candidate)
+        scored.append((compat.compatibility, user_to_public(db, candidate, compatibility=compat)))
+
+    scored.sort(key=lambda pair: pair[0], reverse=True)
+    return [item[1] for item in scored[:limit]]
+
+
+@router.get(
+    "/{user_id}/compatibility",
+    response_model=CompatibilityOut,
+    summary="Get explainable compatibility score with another user",
+)
+def get_user_compatibility(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if user_id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot compute compatibility with yourself.",
+        )
+
+    other = db.query(User).filter(User.id == user_id, User.is_active.is_(True)).first()
+    if not other or is_blocked_between(db, current_user.id, user_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    return compute_compatibility(db, current_user, other)
+
+
+@router.get("/{user_id}", response_model=UserPublicOut, summary="Get public user profile")
+def get_public_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.id == user_id, User.is_active.is_(True)).first()
+    if not user or is_blocked_between(db, current_user.id, user_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    compat = None if user.id == current_user.id else compute_compatibility(db, current_user, user)
+    return user_to_public(db, user, compatibility=compat)

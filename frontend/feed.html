@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Student activity feed, event recaps, group discussions, and campus updates on UniMeet.">
+  <title>Feed — UniMeet</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/unimeet-logo.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="UniMeet">
+  <link rel="apple-touch-icon" href="assets/icons/unimeet-logo.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="feed">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-layout" id="app-shell">
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Primary navigation"></aside>
+
+    <main id="main-content" class="app-main">
+      <div class="page-header">
+        <div>
+          <h1>Student Feed</h1>
+          <p class="muted-small">See event updates, group discussions, and campus moments from students you follow.</p>
+        </div>
+        <div class="page-header-actions">
+          <button type="button" class="btn btn-secondary" id="feed-notifications-btn">Notifications</button>
+          <a href="create-event.html" class="btn btn-primary">Create an outing</a>
+        </div>
+      </div>
+
+      <div class="segmented-tabs" role="tablist" aria-label="Feed filters">
+        <button type="button" class="tab-btn is-active" data-feed-tab="all" role="tab" aria-selected="true">All Activity</button>
+        <button type="button" class="tab-btn" data-feed-tab="following" role="tab" aria-selected="false">Following</button>
+        <button type="button" class="tab-btn" data-feed-tab="groups" role="tab" aria-selected="false">My Groups</button>
+        <button type="button" class="tab-btn" data-feed-tab="events" role="tab" aria-selected="false">With Events</button>
+        <button type="button" class="tab-btn" data-feed-tab="mine" role="tab" aria-selected="false">My Posts</button>
+      </div>
+
+      <form id="feed-search-form" class="filter-bar" style="grid-template-columns: 1fr auto auto;">
+        <input id="feed-q" type="search" placeholder="Search posts, tags, groups, or people..." aria-label="Search posts">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" class="btn btn-secondary" id="feed-clear-btn">Clear</button>
+      </form>
+
+      <div class="feed-layout">
+        <div class="feed-stream">
+          <section class="card feed-composer-card" id="feed-composer-section" hidden>
+            <div class="card-body">
+              <form id="feed-composer-form" class="stack-form">
+                <div class="field">
+                  <label for="post-content">Share an update with campus</label>
+                  <textarea id="post-content" rows="3" maxlength="1000" required placeholder="Heading to a concert, looking for a study spot, or sharing a recap?"></textarea>
+                </div>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="post-tag">Topic</label>
+                    <select id="post-tag">
+                      <option value="Campus Life">Campus Life</option>
+                      <option value="Music">Music</option>
+                      <option value="Gaming">Gaming</option>
+                      <option value="Tech & Coding">Tech &amp; Coding</option>
+                      <option value="Sports & Fitness">Sports &amp; Fitness</option>
+                      <option value="Movies & TV">Movies &amp; TV</option>
+                      <option value="Board Games">Board Games</option>
+                      <option value="Travel">Travel</option>
+                      <option value="Events">Events</option>
+                      <option value="University">University</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="post-image">Photo (optional)</label>
+                    <select id="post-image">
+                      <option value="">No photo (text post)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="post-group">Tag a group (optional)</label>
+                    <select id="post-group">
+                      <option value="">None</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="post-event">Tag an event (optional)</label>
+                    <select id="post-event">
+                      <option value="">None</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:flex-end;gap:0.75rem;">
+                  <button type="submit" class="btn btn-primary" id="post-submit-btn">Publish post</button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <div id="feed-posts-container"></div>
+        </div>
+
+        <aside class="feed-side-rail" aria-label="Activity summary">
+          <section class="card" id="feed-summary-card"></section>
+          <section class="card" id="feed-upcoming-card"></section>
+        </aside>
+      </div>
+    </main>
+
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation"></nav>
+  </div>
+
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/feed.js"></script>
+</body>
+</html>

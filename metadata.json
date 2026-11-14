@@ -1,0 +1,8 @@
+{
+  "name": "UniMeet",
+  "description": "UniMeet — Find your people. Make plans. Go together. University social event discovery and companion matching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

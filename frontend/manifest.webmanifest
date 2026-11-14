@@ -1,0 +1,24 @@
+{
+  "name": "UniMeet — Student Event Companion",
+  "short_name": "UniMeet",
+  "description": "Find your people. Make plans. Go together. University social event discovery and companion matching.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f6f5f1",
+  "theme_color": "#f6f5f1",
+  "icons": [
+    {
+      "src": "/assets/icons/unimeet-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

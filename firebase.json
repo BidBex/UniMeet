@@ -1,0 +1,54 @@
+{
+  "firestore": {
+    "database": "ai-studio-unimeet-dcbd9c9e-96ae-49f0-bc6e-add8a5546578",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "backend/**",
+      "functions/**",
+      "scripts/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/reset-password",
+        "destination": "/reset-password.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          }
+        ]
+      }
+    ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ]
+}
