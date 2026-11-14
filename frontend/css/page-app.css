@@ -1,0 +1,7 @@
+/*
+ * Page stylesheet bundle (dashboard pages without a page-specific stylesheet).
+ * See page-auth.css for why each page links a single bundle.
+ */
+@import "./main.css";
+@import "./components.css";
+@import "./responsive.css";

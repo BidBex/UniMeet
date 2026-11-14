@@ -1,0 +1,11 @@
+/*
+ * Page stylesheet bundle (auth pages).
+ * Linked as the ONLY stylesheet so Vite keeps cascade order in production builds:
+ * when multiple <link> tags are used, Vite hoists the shared files (main/components/responsive)
+ * into a common chunk that loads BEFORE page CSS, letting desktop page rules override
+ * the mobile media queries in responsive.css.
+ */
+@import "./main.css";
+@import "./components.css";
+@import "./auth.css";
+@import "./responsive.css";
