@@ -88,6 +88,23 @@ export const EVENT_IMAGE_PRESETS = [
   { label: "Music Festival", url: "assets/images/event-festival.jpg" },
 ];
 
+/** Display-only cover photo used when an event document has no imageUrl (keyed by EVENT_CATEGORIES). */
+export const CATEGORY_FALLBACK_IMAGES = {
+  Concert: "assets/images/hero-concert.jpg",
+  Festival: "assets/images/event-festival.jpg",
+  Party: "assets/images/event-rooftop.jpg",
+  Theatre: "assets/images/event-cinema.jpg",
+  Cinema: "assets/images/event-cinema.jpg",
+  "Stand-up Comedy": "assets/images/event-rooftop.jpg",
+  Sports: "assets/images/event-sports.jpg",
+  Gaming: "assets/images/event-gaming.jpg",
+  "Board Games": "assets/images/event-boardgames.jpg",
+  "Campus Meetup": "assets/images/event-coffee.jpg",
+  "Tech & Coding": "assets/images/event-hackathon.jpg",
+  "Travel & Outdoors": "assets/images/event-travel.jpg",
+  "Art & Culture": "assets/images/event-cinema.jpg",
+};
+
 export const REPORT_REASONS = [
   { value: "harassment", label: "Harassment or abusive messages" },
   { value: "spam", label: "Spam or unwanted promotion" },
@@ -167,6 +184,7 @@ export const DEMO_ACCOUNT = {
 export const CONFIG = {
   DEMO_ACCOUNT,
   EVENT_CATEGORIES,
+  CATEGORY_FALLBACK_IMAGES,
   GROUP_CATEGORIES,
   INTERESTS_CATALOG,
   SUGGESTED_HOBBIES,
