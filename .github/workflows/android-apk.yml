@@ -154,7 +154,17 @@ jobs:
           }
           """
           if "signingConfigs.release" not in gradle_text:
-              gradle_path.write_text(gradle_text + "\n" + signing_block, encoding="utf-8")
+              gradle_text = gradle_text + "\n" + signing_block
+
+          # 4. Increasing versionCode (run number) + versionName from the v* tag, so Android
+          #    treats each build as a newer version and installs it over the previous one.
+          run_number = int(os.environ.get("GITHUB_RUN_NUMBER", "1"))
+          ref_name = os.environ.get("GITHUB_REF_NAME", "")
+          version_name = ref_name[1:] if re.fullmatch(r"v\d+(\.\d+)*", ref_name) else f"0.0.{run_number}"
+          gradle_text = re.sub(r"versionCode\s+\d+", f"versionCode {run_number}", gradle_text, count=1)
+          gradle_text = re.sub(r'versionName\s+"[^"]*"', f'versionName "{version_name}"', gradle_text, count=1)
+          gradle_path.write_text(gradle_text, encoding="utf-8")
+          print(f"Android versionCode={run_number} versionName={version_name}")
           PY
 
       - name: Build signed release APK
