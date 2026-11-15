@@ -746,7 +746,7 @@ body[data-page="landing"] .site-footer {
   }
 
   .community-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
 
@@ -781,7 +781,7 @@ body[data-page="landing"] .site-footer {
   .landing-hero-grid,
   .solo-split,
   .steps-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-hero-media {
@@ -804,7 +804,7 @@ body[data-page="landing"] .site-footer {
   .intent-grid,
   .landing-events-grid,
   .safety-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-hero-title {
@@ -833,7 +833,7 @@ body[data-page="landing"] .site-footer {
 
 @media (max-width: 340px) {
   .landing-footer-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -853,7 +853,7 @@ body[data-page="landing"] .site-footer {
   }
 
   .landing-mobile-auth {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
