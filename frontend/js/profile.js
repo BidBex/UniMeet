@@ -10,7 +10,7 @@ import {
   renderDashboardShell,
   requireAuthenticatedUser,
 } from "./navigation.js";
-import { escapeHtml, formatDateTime, qs, qsa, showToast } from "./utils.js";
+import { escapeHtml, formatDateTime, getInitials, qs, qsa, showToast } from "./utils.js";
 
 const DEFAULT_SUGGESTED_HOBBIES = [
   "Photography",
@@ -436,8 +436,34 @@ async function renderOverviewTab() {
               <input id="pe-uni" type="text" value="${escapeHtml(u.university || "")}">
             </div>
 
+            <fieldset class="field avatar-picker">
+              <legend>Choose an avatar</legend>
+              <div class="avatar-picker-grid" role="radiogroup" aria-label="Built-in avatars">
+                ${BUILT_IN_AVATARS.map(
+                  (src, i) => `
+                  <button
+                    type="button"
+                    class="avatar-choice${u.profile_picture === src ? " is-selected" : ""}"
+                    role="radio"
+                    aria-checked="${u.profile_picture === src}"
+                    aria-label="Avatar ${i + 1}"
+                    data-avatar-src="${src}"
+                  ><img src="${src}" alt="" width="56" height="56" loading="lazy"></button>`
+                ).join("")}
+                <button
+                  type="button"
+                  class="avatar-choice avatar-choice-none${u.profile_picture ? "" : " is-selected"}"
+                  role="radio"
+                  aria-checked="${!u.profile_picture}"
+                  aria-label="No picture (show initials)"
+                  data-avatar-src=""
+                >${escapeHtml(getInitials(u.first_name, u.last_name))}</button>
+              </div>
+              <span class="muted-small">Tap one, then press Save profile.</span>
+            </fieldset>
+
             <div class="field">
-              <label for="pe-pic-file">Upload profile photo (max 5 MB, JPG/PNG/WebP/GIF)</label>
+              <label for="pe-pic-file">Or upload your own photo (max 5 MB, JPG/PNG/WebP/GIF)</label>
               <div class="upload-field-row">
                 <input id="pe-pic-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
               </div>
@@ -524,6 +550,31 @@ async function renderOverviewTab() {
   const picUrlInput = qs("#pe-pic", container);
   const saveBtn = qs("#pe-save-btn", container);
 
+  /** Marks the avatar choice matching the current picture value (or none). */
+  const syncAvatarChoices = () => {
+    const current = picUrlInput.value.trim();
+    qsa(".avatar-choice", container).forEach((btn) => {
+      const selected = btn.dataset.avatarSrc === current;
+      btn.classList.toggle("is-selected", selected);
+      btn.setAttribute("aria-checked", String(selected));
+    });
+  };
+
+  qsa(".avatar-choice", container).forEach((btn) => {
+    btn.addEventListener("click", () => {
+      picUrlInput.value = btn.dataset.avatarSrc;
+      syncAvatarChoices();
+      const avatarHost = qs("#profile-header-avatar", container);
+      if (avatarHost) {
+        avatarHost.innerHTML = renderAvatarHtml(
+          { ...profileState.user, profile_picture: btn.dataset.avatarSrc || null },
+          true
+        );
+      }
+    });
+  });
+  picUrlInput?.addEventListener("input", syncAvatarChoices);
+
   picFileInput?.addEventListener("change", async () => {
     const file = picFileInput.files?.[0];
     if (!file) return;
@@ -541,6 +592,7 @@ async function renderOverviewTab() {
         picUploadStatus.textContent = `Uploading photo (${pct}%)...`;
       });
       picUrlInput.value = url;
+      syncAvatarChoices();
       const avatarHost = qs("#profile-header-avatar", container);
       if (avatarHost) {
         avatarHost.innerHTML = renderAvatarHtml({ ...profileState.user, profile_picture: url }, true);
@@ -611,6 +663,12 @@ async function renderOverviewTab() {
     }
   });
 }
+
+/** Built-in illustrated avatars (no upload or Firebase Storage needed). */
+const BUILT_IN_AVATARS = Array.from(
+  { length: 18 },
+  (_, i) => `assets/images/avatars/u${String(i + 1).padStart(2, "0")}.svg`
+);
 
 /** Accepts empty, absolute http(s) image links, or app-bundled image paths (e.g. assets/images/avatars/u01.svg). */
 function isValidProfilePictureValue(value) {

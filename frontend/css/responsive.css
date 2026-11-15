@@ -121,8 +121,14 @@
   .chat-shell {
     grid-template-columns: minmax(0, 1fr);
     height: calc(100dvh - 185px - var(--safe-bottom));
-    min-height: 440px;
+    min-height: 320px;
     max-height: none;
+  }
+
+  /* While a chat is open on phones, hide the page title block (the top bar already says
+     "Messages") so the chat box and its message input fit above the bottom navigation. */
+  body.chat-thread-open .app-main > .page-header {
+    display: none;
   }
 
   .chat-list {

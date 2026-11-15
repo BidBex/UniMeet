@@ -19,6 +19,9 @@ Without extra setup, the workflow generates a clean non-debug RSA release key pe
 - `ANDROID_KEY_ALIAS`
 - `ANDROID_KEY_PASSWORD`
 
+## In-App Update Notice
+Release builds (tags like `v1.2.0`) embed their version via `VITE_APP_VERSION`. Inside the app, `frontend/js/update-check.js` compares it with the latest GitHub release (at most every 6 hours) and shows a **New version available** banner with an **Update** link to the new APK. **Later** hides it until the next release. The website and non-release builds never show it.
+
 ## Installing on Android
 - **If downloaded from GitHub Actions Artifacts**, extract the downloaded zip file first on your phone (Files app) to access `UniMeet-release.apk`.
 - **If Play Protect prompts "Unrecognized app / developer"**: Every APK distributed outside Google Play Store is unknown to Play Protect until uploaded to Google Play; tap **More details -> Install anyway** (or **Scan app**).

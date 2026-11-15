@@ -8,6 +8,7 @@ import { API, setFallbackToken } from "./api.js";
 import { CONFIG } from "./config.js";
 import { DemoStore } from "./demo-store.js";
 import { auth, waitForAuthInit } from "./firebase-client.js";
+import { checkForAppUpdate } from "./update-check.js";
 import {
   escapeHtml,
   formatRelativeTime,
@@ -1226,3 +1227,7 @@ export async function initNavigation() {
 }
 
 document.addEventListener("DOMContentLoaded", initNavigation);
+// Android app only: tell the user when a newer APK release is available.
+document.addEventListener("DOMContentLoaded", () => {
+  checkForAppUpdate().catch(() => {});
+});
