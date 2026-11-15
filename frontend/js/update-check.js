@@ -8,7 +8,7 @@
  */
 import { isNativeApp } from "./native.js";
 
-const REPO = "BidBex/UniMeet4";
+const REPO = "BidBex/UniMeet";
 const LATEST_RELEASE_API = `https://api.github.com/repos/${REPO}/releases/latest`;
 const FALLBACK_APK_URL = `https://github.com/${REPO}/releases/latest/download/UniMeet-release.apk`;
 const CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;

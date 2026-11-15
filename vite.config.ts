@@ -49,7 +49,7 @@ function unimeetStaticPlugin(): Plugin {
 export default defineConfig(() => {
   return {
     root: FRONTEND_DIR,
-    // Relative asset URLs so the same build works at a sub-path (GitHub Pages: /UniMeet4/),
+    // Relative asset URLs so the same build works at a sub-path (GitHub Pages: /UniMeet/),
     // at a domain root (Firebase Hosting) and inside the Capacitor Android app.
     base: './',
     plugins: [unimeetStaticPlugin()],
