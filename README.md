@@ -39,6 +39,10 @@ npm run build      # Builds production bundle into dist/
 npm run lint       # Runs TypeScript check + ESLint on firestore.rules
 ```
 
+## Website (GitHub Pages)
+
+The web app is published at **https://bidbex.github.io/UniMeet4/**. Every push to `main` runs `.github/workflows/github-pages.yml`, which builds the site (`npm run build`) and deploys `dist/` to GitHub Pages; it can also be started from **Actions -> Deploy website to GitHub Pages -> Run workflow**. No Firebase credentials are needed: the site talks to Firebase Authentication and Cloud Firestore directly from the browser.
+
 ## Firebase Deployment (Browser-Only via GitHub Actions or Firebase Console)
 
 No local terminal or Firebase CLI installation is required:
