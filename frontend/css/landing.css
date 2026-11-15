@@ -223,6 +223,58 @@ body[data-page="landing"] .landing-hero {
   margin: 0;
 }
 
+/* Website-only Android APK download (hidden inside the app by js/landing.js) */
+.landing-apk-download {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  min-height: 52px;
+  padding: 0.6rem 1.1rem 0.6rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.landing-apk-download[hidden] {
+  display: none;
+}
+
+.landing-apk-download:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.landing-apk-download:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.landing-apk-icon {
+  flex-shrink: 0;
+  color: #3ddc84;
+}
+
+.landing-apk-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.landing-apk-text strong {
+  font-size: 0.95rem;
+}
+
+.landing-apk-text span {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
 .landing-hero-media {
   position: relative;
   border-radius: var(--radius-xl);
@@ -821,6 +873,12 @@ body[data-page="landing"] .site-footer {
   .landing-hero-actions .btn,
   .final-cta-actions .btn,
   .solo-copy .btn {
+    width: 100%;
+  }
+
+  .landing-apk-download {
+    display: flex;
+    align-self: stretch;
     width: 100%;
   }
 
