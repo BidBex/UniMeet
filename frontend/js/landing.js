@@ -4,6 +4,7 @@
  */
 import { API } from "./api.js";
 import { escapeHtml, formatDateTime, openModal, qs, renderMediaWithFallback } from "./utils.js";
+import { isNativeApp } from "./native.js";
 
 const PRESET_PHOTO_FALLBACKS = new Map([
   ["assets/images/concert-preset.svg", "assets/images/hero-concert.jpg"],
@@ -143,13 +144,6 @@ function wireLandingFooterModals() {
     if (!btn) return;
     openLegalModal(btn.dataset.legalModal);
   });
-}
-
-/** True when running inside the Capacitor Android app (its WebView injects window.Capacitor). */
-function isNativeApp() {
-  const cap = window.Capacitor;
-  if (cap && typeof cap.isNativePlatform === "function") return cap.isNativePlatform();
-  return Boolean(cap?.platform && cap.platform !== "web");
 }
 
 /** The APK download button is website-only: keep it hidden inside the installed app. */

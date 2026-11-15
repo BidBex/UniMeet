@@ -1,0 +1,36 @@
+name: Layout check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  layout-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies and build web bundle
+        run: |
+          npm install --ignore-scripts --legacy-peer-deps
+          npm run build
+
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --ignore-scripts --legacy-peer-deps playwright@1
+          npx playwright install --with-deps chromium
+
+      - name: Check every page at 320 / 360 / 768 / 1440 px
+        # The script serves ./dist itself on a free local port.
+        run: node scripts/check-layout.mjs

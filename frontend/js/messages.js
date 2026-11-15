@@ -39,6 +39,36 @@ const chatState = {
 const DOTS_ICON =
   '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>';
 
+const MOBILE_CHAT_QUERY = "(max-width: 860px)";
+
+/**
+ * On phones, size the chat box to the space between its top edge and the bottom navigation
+ * bar, so the message input is always visible without scrolling the page.
+ */
+function fitChatShellToViewport() {
+  const shell = qs("#chat-shell");
+  if (!shell) return;
+  if (!window.matchMedia(MOBILE_CHAT_QUERY).matches) {
+    shell.style.height = "";
+    return;
+  }
+  // Space reserved below the chat box: the page's bottom padding (which already leaves room
+  // for the fixed bottom navigation) plus the main column's bottom padding.
+  const px = (el, prop) => (el ? parseFloat(getComputedStyle(el)[prop]) || 0 : 0);
+  const reservedBelow = px(qs("#app-shell"), "paddingBottom") + px(qs("#main-content"), "paddingBottom");
+  const topInPage = shell.getBoundingClientRect().top + window.scrollY;
+  const available = window.innerHeight - topInPage - reservedBelow;
+  shell.style.height = `${Math.max(320, Math.floor(available))}px`;
+}
+
+/** Shows or hides the open thread; on phones the page header is hidden while a chat is open. */
+function setThreadOpen(isOpen) {
+  qs("#chat-shell")?.classList.toggle("has-active-thread", isOpen);
+  document.body.classList.toggle("chat-thread-open", isOpen);
+  if (window.matchMedia(MOBILE_CHAT_QUERY).matches) window.scrollTo(0, 0);
+  fitChatShellToViewport();
+}
+
 function setSyncStatus(label, cssClass = "") {
   const el = qs("#ws-status-label");
   if (!el) return;
@@ -348,8 +378,7 @@ async function selectConversation(conversationId) {
   chatState.activeMessages = [];
   renderConversationsList();
 
-  const chatShell = qs("#chat-shell");
-  if (chatShell) chatShell.classList.add("has-active-thread");
+  setThreadOpen(true);
 
   const headerEl = qs("#chat-pane-header");
   const historyEl = qs("#chat-history");
@@ -391,7 +420,7 @@ async function selectConversation(conversationId) {
     `;
 
     qs("#chat-back-btn", headerEl)?.addEventListener("click", () => {
-      if (chatShell) chatShell.classList.remove("has-active-thread");
+      setThreadOpen(false);
     });
 
     if (conv.other_user) {
@@ -421,6 +450,9 @@ async function selectConversation(conversationId) {
     historyEl.innerHTML = "";
     applySnapshotMessages(detail.messages || []);
     composeForm.hidden = false;
+    // Messages loaded successfully. Don't wait for the live listener to fire before saying so:
+    // some listeners (e.g. the demo store) only fire on the next change.
+    setSyncStatus("Connected (live)", "status-text-success");
 
     chatState.unsubMessages = API.subscribeToMessages(
       conversationId,
@@ -457,7 +489,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   // Open menus are fixed-positioned, so close them when the chat scrolls or the screen resizes.
   qs("#chat-history")?.addEventListener("scroll", () => closeAllMessageMenus(), { passive: true });
-  window.addEventListener("resize", () => closeAllMessageMenus());
+  window.addEventListener("resize", () => {
+    closeAllMessageMenus();
+    fitChatShellToViewport();
+  });
+  fitChatShellToViewport();
   document.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape") closeAllMessageMenus();
   });

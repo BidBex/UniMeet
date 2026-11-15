@@ -33,7 +33,14 @@ jobs:
           npm install --save-dev --ignore-scripts --legacy-peer-deps @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
       - name: Build UniMeet web bundle with Firebase SDK
-        run: npm run build
+        run: |
+          # Release builds (v* tags) embed their version so the app can show an update notice;
+          # other builds leave it empty, which turns the update check off.
+          if [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            export VITE_APP_VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "VITE_APP_VERSION=${VITE_APP_VERSION:-<none>}"
+          npm run build
 
       - name: Prepare Android web app bundle
         run: |
