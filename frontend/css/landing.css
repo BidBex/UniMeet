@@ -5,8 +5,8 @@ body[data-page="landing"] {
   --color-bg-surface: #191d1a;
   --color-bg-subtle: #202521;
   --color-bg-dark: #0c0e0d;
-  --color-header-bg: rgba(17, 20, 18, 0.9);
-  --color-nav-bg: rgba(25, 29, 26, 0.96);
+  --color-header-bg: #111412;
+  --color-nav-bg: #191d1a;
   --color-text: #f2efe8;
   --color-text-secondary: #a8aea7;
   --color-border: #2c332e;
@@ -36,8 +36,6 @@ body[data-page="landing"] .site-header {
   top: 0;
   z-index: 60;
   background: var(--color-header-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -748,7 +746,7 @@ body[data-page="landing"] .site-footer {
   }
 
   .community-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
 
@@ -783,7 +781,7 @@ body[data-page="landing"] .site-footer {
   .landing-hero-grid,
   .solo-split,
   .steps-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-hero-media {
@@ -806,7 +804,7 @@ body[data-page="landing"] .site-footer {
   .intent-grid,
   .landing-events-grid,
   .safety-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-hero-title {
@@ -835,7 +833,7 @@ body[data-page="landing"] .site-footer {
 
 @media (max-width: 340px) {
   .landing-footer-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -855,7 +853,7 @@ body[data-page="landing"] .site-footer {
   }
 
   .landing-mobile-auth {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

@@ -6,6 +6,7 @@
  * and string document IDs.
  */
 import { API } from "./api.js";
+import { positionFloatingMenu, resetFloatingMenu } from "./floating-menu.js";
 import {
   buildGroupMenuHtml,
   openSafetyModal,
@@ -65,8 +66,12 @@ function closeAllMessageMenus(exceptWrap = null) {
     if (exceptWrap && wrap === exceptWrap) return;
     const dd = qs(".options-dropdown", wrap);
     const btn = qs(".options-dots-btn", wrap);
-    if (dd) dd.hidden = true;
+    if (dd) {
+      dd.hidden = true;
+      resetFloatingMenu(dd);
+    }
     if (btn) btn.setAttribute("aria-expanded", "false");
+    wrap.closest(".chat-bubble")?.classList.remove("has-open-menu");
   });
 }
 
@@ -199,9 +204,20 @@ function wireBubbleMenu(bubble, msg) {
   trigger?.addEventListener("click", (ev) => {
     ev.stopPropagation();
     const shouldOpen = dropdown.hidden;
-    closeAllMessageMenus(wrap);
-    dropdown.hidden = !shouldOpen;
-    trigger.setAttribute("aria-expanded", String(shouldOpen));
+    closeAllMessageMenus(shouldOpen ? null : wrap);
+    if (!shouldOpen) {
+      closeAllMessageMenus();
+      return;
+    }
+    dropdown.hidden = false;
+    trigger.setAttribute("aria-expanded", "true");
+    bubble.classList.add("has-open-menu");
+    // Fixed positioning keeps the menu above later messages and inside the chat area
+    // (opens upward for the bottom-most messages, never past the left/right edges).
+    positionFloatingMenu(trigger, dropdown, {
+      boundsEl: qs("#chat-history"),
+      align: bubble.classList.contains("is-mine") ? "end" : "start",
+    });
   });
 
   qs('[data-msg-action="unsend"]', dropdown)?.addEventListener("click", () => {
@@ -438,6 +454,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!ev.target.closest("[data-msg-menu]")) {
       closeAllMessageMenus();
     }
+  });
+  // Open menus are fixed-positioned, so close them when the chat scrolls or the screen resizes.
+  qs("#chat-history")?.addEventListener("scroll", () => closeAllMessageMenus(), { passive: true });
+  window.addEventListener("resize", () => closeAllMessageMenus());
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape") closeAllMessageMenus();
   });
 
   try {

@@ -2399,6 +2399,18 @@ export const API = {
           if (typeof onProgress === "function") onProgress(pct);
         },
         (err) => {
+          // A 404 from the Storage API means the project has no Cloud Storage bucket
+          // (new buckets require the Blaze plan), so uploads cannot work until one is created.
+          if (err?.status === 404 || /"code":\s*404/.test(String(err?.customData?.serverResponse || ""))) {
+            reject(
+              makeError(
+                "Photo uploads aren't available yet: this app's Firebase project has no file storage set up. You can paste an image link (https://...) in the field below instead.",
+                503,
+                "storage/bucket-not-found"
+              )
+            );
+            return;
+          }
           reject(wrapFriendlyAuthError(err, "Image upload failed. Please check your connection and try again."));
         },
         async () => {
