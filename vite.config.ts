@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {defineConfig, type Plugin} from 'vite';
 
-const FRONTEND_DIR = path.resolve(__dirname, 'frontend');
-const DIST_DIR = path.resolve(__dirname, 'dist');
+const FRONTEND_DIR = path.resolve(import.meta.dirname, 'frontend');
+const DIST_DIR = path.resolve(import.meta.dirname, 'dist');
 
 const htmlEntries = Object.fromEntries(
   fs
@@ -55,8 +55,8 @@ export default defineConfig(() => {
     plugins: [unimeetStaticPlugin()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
-        '@firebase-config': path.resolve(__dirname, 'firebase-applet-config.json'),
+        '@': path.resolve(import.meta.dirname, '.'),
+        '@firebase-config': path.resolve(import.meta.dirname, 'firebase-applet-config.json'),
       },
     },
     build: {
@@ -68,7 +68,7 @@ export default defineConfig(() => {
     },
     server: {
       fs: {
-        allow: [path.resolve(__dirname)],
+        allow: [path.resolve(import.meta.dirname)],
       },
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       hmr: process.env.DISABLE_HMR !== 'true',
