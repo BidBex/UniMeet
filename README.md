@@ -47,7 +47,7 @@ The score is computed in the app (`computeCompatibility` in `frontend/js/api.js`
 
 The app always shows the reasons behind the score, so students know why someone was suggested.
 
-## Try it (for judges)
+## Try it
 
 1. Open https://bidbex.github.io/UniMeet/ and tap **Log In → Sign in as Demo Student**.
 2. **Discover:** swipe through events and people, then open a person's card to see their compatibility score and reasons.
