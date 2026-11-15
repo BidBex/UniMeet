@@ -27,8 +27,8 @@
   --color-bg-surface: #ffffff;
   --color-bg-subtle: #eceae2;
   --color-bg-dark: #162820;
-  --color-header-bg: rgba(246, 245, 241, 0.92);
-  --color-nav-bg: rgba(255, 255, 255, 0.96);
+  --color-header-bg: #f6f5f1;
+  --color-nav-bg: #ffffff;
   --color-text: #191c1a;
   --color-text-secondary: #595e58;
   --color-border: #dfddd4;
@@ -72,8 +72,8 @@
   --color-bg-surface: #191d1a;
   --color-bg-subtle: #232824;
   --color-bg-dark: #0c0e0d;
-  --color-header-bg: rgba(17, 20, 18, 0.92);
-  --color-nav-bg: rgba(25, 29, 26, 0.96);
+  --color-header-bg: #111412;
+  --color-nav-bg: #191d1a;
   --color-text: #f2efe8;
   --color-text-secondary: #a8aea7;
   --color-border: #2c332e;

@@ -397,7 +397,7 @@ async function renderOverviewTab() {
           ${statsRowHtml}
           ${verifyBannerHtml}
 
-          <form id="profile-edit-form" class="stack-form">
+          <form id="profile-edit-form" class="stack-form" novalidate>
             <div class="field-row">
               <div class="field">
                 <label for="pe-first">First name</label>
@@ -449,7 +449,7 @@ async function renderOverviewTab() {
 
             <div class="field">
               <label for="pe-pic">Profile picture URL (optional)</label>
-              <input id="pe-pic" type="url" value="${escapeHtml(u.profile_picture || "")}" placeholder="Leave blank to use initials avatar">
+              <input id="pe-pic" type="text" inputmode="url" autocomplete="off" value="${escapeHtml(u.profile_picture || "")}" placeholder="https://... (leave blank to use initials avatar)">
             </div>
 
             <div class="field">
@@ -565,6 +565,24 @@ async function renderOverviewTab() {
 
   qs("#profile-edit-form", container).addEventListener("submit", async (ev) => {
     ev.preventDefault();
+    // Validate in JS (form is novalidate): Android WebView never shows the browser's validation
+    // bubbles, so an invalid field used to make "Save profile" silently do nothing.
+    const form = ev.currentTarget;
+    const picValue = picUrlInput.value.trim();
+    picUrlInput.setCustomValidity(
+      isValidProfilePictureValue(picValue)
+        ? ""
+        : "Enter an image link starting with https://, or leave the field empty."
+    );
+    const invalidField = [...form.elements].find((el) => el.willValidate && !el.checkValidity());
+    if (invalidField) {
+      const label = form.querySelector(`label[for="${invalidField.id}"]`)?.textContent?.trim() || "A field";
+      showToast(`${label}: ${invalidField.validationMessage}`, "error");
+      invalidField.focus();
+      invalidField.scrollIntoView({ block: "center", behavior: "smooth" });
+      return;
+    }
+
     saveBtn.disabled = true;
     saveBtn.textContent = "Saving...";
 
@@ -592,6 +610,19 @@ async function renderOverviewTab() {
       saveBtn.textContent = "Save profile";
     }
   });
+}
+
+/** Accepts empty, absolute http(s) image links, or app-bundled image paths (e.g. assets/images/avatars/u01.svg). */
+function isValidProfilePictureValue(value) {
+  if (!value) return true;
+  if (value.length > 1000) return false;
+  if (/^assets\/images\/[\w\-/]+\.(svg|png|jpe?g|webp|gif)$/i.test(value)) return true;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
 }
 
 async function renderInterestsTab() {
