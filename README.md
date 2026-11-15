@@ -6,8 +6,8 @@ Built for **UniHack 2026** in Timișoara, Romania.
 
 | | |
 |---|---|
-| **Live website** | https://bidbex.github.io/UniMeet4/ |
-| **Android app (APK)** | [Download the latest release](https://github.com/BidBex/UniMeet4/releases/latest/download/UniMeet-release.apk) · [All releases](https://github.com/BidBex/UniMeet4/releases) |
+| **Live website** | https://bidbex.github.io/UniMeet/ |
+| **Android app (APK)** | [Download the latest release](https://github.com/BidBex/UniMeet/releases/latest/download/UniMeet-release.apk) · [All releases](https://github.com/BidBex/UniMeet/releases) |
 | **Demo account** | `demo@unimeet.app` / `DemoUser123!` (or tap **Sign in as Demo Student** on the login page) |
 
 ---
@@ -49,7 +49,7 @@ The app always shows the reasons behind the score, so students know why someone 
 
 ## Try it (for judges)
 
-1. Open https://bidbex.github.io/UniMeet4/ and tap **Log In → Sign in as Demo Student**.
+1. Open https://bidbex.github.io/UniMeet/ and tap **Log In → Sign in as Demo Student**.
 2. **Discover:** swipe through events and people, then open a person's card to see their compatibility score and reasons.
 3. **Events:** open an event, like it or join it.
 4. **Groups → Going Solo Feed:** see students going alone and join a group.
