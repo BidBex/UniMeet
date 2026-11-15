@@ -141,7 +141,9 @@ The Firebase project settings are in `firebase-applet-config.json`. These values
 
 ## Team
 
-- **BidBex** — [github.com/BidBex](https://github.com/BidBex)
+- **Opre Matei** — [github.com/BidBex](https://github.com/BidBex)
+- **Mureșan Tiago** - [github.com/Tiago3241](https://github.com/Tiago3241)
+- **Oprișor Radu** - [github.com/Andrei2025](https://github.com/Andrei2025)
 
 ## Credits
 
