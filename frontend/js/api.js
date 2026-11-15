@@ -120,6 +120,19 @@ function mapUserDocToUi(data, email = null) {
   };
 }
 
+const BUNDLED_EVENT_IMAGES = new Set(CONFIG.EVENT_IMAGE_PRESETS.map((p) => p.url));
+
+/**
+ * Display-only image resolution: keeps uploaded/remote URLs and bundled photos as-is, but swaps
+ * missing or stale local paths (e.g. old "assets/images/*-preset.svg" values) for the category photo.
+ */
+function resolveEventImageUrl(imageUrl, category) {
+  const raw = String(imageUrl || "").trim();
+  const isLocalAsset = raw.startsWith("assets/") || raw.startsWith("/assets/");
+  if (raw && (!isLocalAsset || BUNDLED_EVENT_IMAGES.has(raw.replace(/^\//, "")))) return raw;
+  return CONFIG.CATEGORY_FALLBACK_IMAGES[category] || raw || null;
+}
+
 function mapEventDocToUi(data, likedSet = new Set(), joinedSet = new Set()) {
   const id = data.eventId;
   return {
@@ -140,7 +153,7 @@ function mapEventDocToUi(data, likedSet = new Set(), joinedSet = new Set()) {
     max_participants: data.maximumParticipants ?? null,
     participant_count: Number(data.participantCount ?? 0),
     like_count: Number(data.likeCount ?? 0),
-    image_url: data.imageUrl || null,
+    image_url: resolveEventImageUrl(data.imageUrl, data.category),
     is_active: data.isActive !== false,
     is_sample: Boolean(data.isSample),
     is_liked: likedSet.has(id),
